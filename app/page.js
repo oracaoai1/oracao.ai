@@ -1,18 +1,26 @@
 import Link from "next/link";
 import { characters, getCategories } from "@/lib/characters";
-import CharacterCard from "./components/CharacterCard";
+import CharacterGallery from "./components/CharacterGallery";
 import { TopBar, Footer } from "./components/SiteChrome";
 
-function slug(s) {
-  return s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9]+/g, "-");
+// Apenas os campos de exibição (sem o `raw` da base) vão para o cliente.
+function toDisplay(c) {
+  return {
+    id: c.id,
+    name: c.name,
+    title: c.title,
+    category: c.category,
+    era: c.era,
+    feast: c.feast,
+    image: c.image,
+    accent: c.accent,
+    short: c.short,
+  };
 }
 
 export default function HomePage() {
   const categories = getCategories();
+  const display = characters.map(toDisplay);
 
   return (
     <>
@@ -50,27 +58,8 @@ export default function HomePage() {
               da figura que representa, fundamentado em seus escritos, nas
               Escrituras e na doutrina católica.
             </p>
-            <div className="cat-nav">
-              {categories.map((cat) => (
-                <a key={cat} href={`#cat-${slug(cat)}`} className="cat-pill">
-                  {cat}
-                </a>
-              ))}
-            </div>
           </div>
-
-          {categories.map((cat) => (
-            <div key={cat} id={`cat-${slug(cat)}`} className="cat-block">
-              <h3 className="cat-title">{cat}</h3>
-              <div className="grid">
-                {characters
-                  .filter((c) => c.category === cat)
-                  .map((c) => (
-                    <CharacterCard key={c.id} character={c} />
-                  ))}
-              </div>
-            </div>
-          ))}
+          <CharacterGallery characters={display} categories={categories} />
         </div>
       </section>
 
