@@ -2,11 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-
-function initials(name) {
-  const parts = name.replace(/^(São|Santo|Santa)\s+/i, "").split(" ");
-  return (parts[0]?.[0] || "") + (parts[1]?.[0] || "");
-}
+import { Avatar } from "@/app/components/CharacterCard";
 
 export default function ChatRoom({ character }) {
   const greeting = `A paz esteja contigo! Sou ${character.name}. Sobre o que gostaria de conversar?`;
@@ -79,13 +75,11 @@ export default function ChatRoom({ character }) {
             ← Voltar
           </Link>
           <div className="who">
-            <div className="avatar" style={{ background: character.accent }}>
-              {initials(character.name)}
-            </div>
+            <Avatar character={character} />
             <div>
               <h2>{character.name}</h2>
               <div className="role">
-                {character.title} · {character.era}
+                {[character.title, character.era].filter(Boolean).join(" · ")}
               </div>
             </div>
           </div>
@@ -98,24 +92,14 @@ export default function ChatRoom({ character }) {
             {messages.map((m, i) => (
               <div key={i} className={`msg ${m.role}`}>
                 {m.role === "assistant" && (
-                  <div
-                    className="mini-avatar"
-                    style={{ background: character.accent }}
-                  >
-                    {initials(character.name)}
-                  </div>
+                  <Avatar character={character} className="mini-avatar" />
                 )}
                 <div className="bubble">{m.content}</div>
               </div>
             ))}
             {loading && (
               <div className="msg assistant">
-                <div
-                  className="mini-avatar"
-                  style={{ background: character.accent }}
-                >
-                  {initials(character.name)}
-                </div>
+                <Avatar character={character} className="mini-avatar" />
                 <div className="bubble">
                   <span className="typing">
                     <span></span>
@@ -169,8 +153,8 @@ export default function ChatRoom({ character }) {
             </button>
           </div>
           <p className="chat-note">
-            Respostas geradas por IA com base em fontes históricas. Podem conter
-            imprecisões.
+            {character.aviso ||
+              "Respostas geradas por IA com base em fontes históricas. Podem conter imprecisões."}
           </p>
         </div>
       </div>
