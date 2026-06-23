@@ -655,6 +655,60 @@ h3 {
   color: var(--navy-deep);
 }
 
+/* ---------- Favoritos (coração) ---------- */
+.card {
+  position: relative;
+}
+.fav-heart {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 253, 248, 0.88);
+  color: #c75d7c;
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(27, 42, 74, 0.14);
+  transition: transform 0.12s, background 0.15s, color 0.15s;
+}
+.fav-heart:hover {
+  transform: scale(1.14);
+  background: var(--white);
+}
+.fav-heart.is-active {
+  color: #c0395f;
+}
+
+/* Coração no cabeçalho do chat: variante "inline" (sem overlay). */
+.chat-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chat-actions .new-chat {
+  margin-left: 0;
+}
+.chat-fav {
+  position: static;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  box-shadow: none;
+  font-size: 1.4rem;
+}
+.chat-fav:hover {
+  background: var(--parchment-deep);
+  transform: none;
+}
+
 /* Aviso para deslogados poderem salvar a conversa. */
 .save-hint {
   text-align: center;

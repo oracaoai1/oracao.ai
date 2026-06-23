@@ -9,6 +9,8 @@ import {
   createConversation,
   saveExchange,
 } from "@/lib/conversations";
+import FavoriteHeart from "@/app/components/FavoriteHeart";
+import { getFavoriteIds, addFavorite, removeFavorite } from "@/lib/favorites";
 
 export default function ChatRoom({ character }) {
   const greeting = `A paz esteja contigo! Sou ${character.name}. Sobre o que gostaria de conversar?`;
@@ -24,6 +26,7 @@ export default function ChatRoom({ character }) {
   // Estado de autenticação / persistência.
   const [user, setUser] = useState(null);
   const [historyLoading, setHistoryLoading] = useState(true);
+  const [isFav, setIsFav] = useState(false);
   const conversationIdRef = useRef(null);
 
   const scrollRef = useRef(null);
@@ -51,6 +54,12 @@ export default function ChatRoom({ character }) {
           }
         } catch {
           /* histórico indisponível — segue como conversa nova */
+        }
+        try {
+          const favIds = await getFavoriteIds(supabase);
+          if (active) setIsFav(favIds.includes(character.id));
+        } catch {
+          /* favoritos indisponíveis — ignora */
         }
       }
       if (active) setHistoryLoading(false);
@@ -137,6 +146,17 @@ export default function ChatRoom({ character }) {
     setInput("");
   }
 
+  async function toggleFavorite() {
+    const was = isFav;
+    setIsFav(!was); // otimista
+    try {
+      if (was) await removeFavorite(supabase, character.id);
+      else await addFavorite(supabase, character.id);
+    } catch {
+      setIsFav(was); // reverte
+    }
+  }
+
   const showSuggestions =
     !historyLoading && messages.length === 0 && !loading;
 
@@ -156,10 +176,19 @@ export default function ChatRoom({ character }) {
               </div>
             </div>
           </div>
-          {user && messages.length > 0 && (
-            <button className="new-chat" onClick={newConversation}>
-              ＋ Nova conversa
-            </button>
+          {user && (
+            <div className="chat-actions">
+              <FavoriteHeart
+                active={isFav}
+                onToggle={toggleFavorite}
+                className="chat-fav"
+              />
+              {messages.length > 0 && (
+                <button className="new-chat" onClick={newConversation}>
+                  ＋ Nova conversa
+                </button>
+              )}
+            </div>
           )}
         </div>
       </header>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FavoriteHeart from "./FavoriteHeart";
 
 export function initials(name) {
   // Pega as iniciais do primeiro nome próprio após títulos como "São"/"Santa".
@@ -23,9 +24,19 @@ export function Avatar({ character, className = "avatar" }) {
   );
 }
 
-export default function CharacterCard({ character }) {
+export default function CharacterCard({
+  character,
+  isFavorite = false,
+  onToggleFavorite,
+}) {
   return (
     <Link href={`/chat/${character.id}`} className="card">
+      {onToggleFavorite && (
+        <FavoriteHeart
+          active={isFavorite}
+          onToggle={() => onToggleFavorite(character.id)}
+        />
+      )}
       <Avatar character={character} />
       <div className="cat">{character.category}</div>
       <h3>{character.name}</h3>
