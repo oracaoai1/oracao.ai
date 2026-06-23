@@ -3,7 +3,10 @@ import { getCharacter, buildSystemPrompt } from "@/lib/characters";
 
 export const runtime = "nodejs";
 
-const MODEL = "claude-opus-4-8";
+// Modelo configurável por ambiente — troque ANTHROPIC_MODEL no .env.local
+// (e na Vercel) para mudar sem alterar código. Padrão: Haiku (rápido e mais
+// barato). Para máxima qualidade, use "claude-opus-4-8".
+const MODEL = process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001";
 const MAX_TOKENS = 1024;
 
 export async function POST(req) {
