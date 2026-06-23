@@ -3,17 +3,62 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Avatar } from "@/app/components/CharacterCard";
+import { createClient } from "@/lib/supabase/client";
+import {
+  getLatestConversation,
+  createConversation,
+  saveExchange,
+} from "@/lib/conversations";
 
 export default function ChatRoom({ character }) {
   const greeting = `A paz esteja contigo! Sou ${character.name}. Sobre o que gostaria de conversar?`;
-  const [messages, setMessages] = useState([
-    { role: "assistant", content: greeting },
-  ]);
+
+  // `messages` guarda APENAS o diálogo real (user/assistant). A saudação é
+  // renderizada separadamente, fora do array — assim o histórico carregado do
+  // Supabase não se mistura com ela e enviamos o contexto correto ao modelo.
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Estado de autenticação / persistência.
+  const [user, setUser] = useState(null);
+  const [historyLoading, setHistoryLoading] = useState(true);
+  const conversationIdRef = useRef(null);
+
   const scrollRef = useRef(null);
   const textareaRef = useRef(null);
+  const supabaseRef = useRef(null);
+  if (!supabaseRef.current) supabaseRef.current = createClient();
+  const supabase = supabaseRef.current;
+
+  // Ao montar: descobre o usuário e, se logado, carrega a última conversa.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!active) return;
+      setUser(user ?? null);
+
+      if (user) {
+        try {
+          const conv = await getLatestConversation(supabase, character.id);
+          if (active && conv) {
+            conversationIdRef.current = conv.id;
+            setMessages(conv.messages);
+          }
+        } catch {
+          /* histórico indisponível — segue como conversa nova */
+        }
+      }
+      if (active) setHistoryLoading(false);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [supabase, character.id]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -38,23 +83,43 @@ export default function ChatRoom({ character }) {
     setLoading(true);
     if (textareaRef.current) textareaRef.current.style.height = "auto";
 
+    let reply;
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           characterId: character.id,
-          // Não envia a saudação inicial (não é parte do diálogo real).
-          messages: next.slice(1),
+          messages: next, // diálogo completo (sem a saudação) para contexto
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erro ao conversar.");
-      setMessages((m) => [...m, { role: "assistant", content: data.reply }]);
+      reply = data.reply;
+      setMessages((m) => [...m, { role: "assistant", content: reply }]);
     } catch (err) {
       setError(err.message);
-    } finally {
       setLoading(false);
+      return;
+    }
+
+    setLoading(false);
+
+    // Persiste o par no Supabase (só para usuários logados). Falha aqui não
+    // deve quebrar a conversa em andamento — apenas registra no console.
+    if (user) {
+      try {
+        if (!conversationIdRef.current) {
+          conversationIdRef.current = await createConversation(
+            supabase,
+            character.id,
+            content
+          );
+        }
+        await saveExchange(supabase, conversationIdRef.current, content, reply);
+      } catch (err) {
+        console.warn("Não foi possível salvar a conversa:", err.message);
+      }
     }
   }
 
@@ -65,7 +130,15 @@ export default function ChatRoom({ character }) {
     }
   }
 
-  const showSuggestions = messages.length === 1 && !loading;
+  function newConversation() {
+    conversationIdRef.current = null;
+    setMessages([]);
+    setError("");
+    setInput("");
+  }
+
+  const showSuggestions =
+    !historyLoading && messages.length === 0 && !loading;
 
   return (
     <div className="chat-page">
@@ -83,12 +156,23 @@ export default function ChatRoom({ character }) {
               </div>
             </div>
           </div>
+          {user && messages.length > 0 && (
+            <button className="new-chat" onClick={newConversation}>
+              ＋ Nova conversa
+            </button>
+          )}
         </div>
       </header>
 
       <div className="chat-scroll" ref={scrollRef}>
         <div className="container">
           <div className="chat-stack">
+            {/* Saudação fixa (não faz parte do diálogo persistido). */}
+            <div className="msg assistant">
+              <Avatar character={character} className="mini-avatar" />
+              <div className="bubble">{greeting}</div>
+            </div>
+
             {messages.map((m, i) => (
               <div key={i} className={`msg ${m.role}`}>
                 {m.role === "assistant" && (
@@ -114,11 +198,7 @@ export default function ChatRoom({ character }) {
           {showSuggestions && (
             <div className="suggestions">
               {character.questions.map((q) => (
-                <button
-                  key={q}
-                  className="chip"
-                  onClick={() => send(q)}
-                >
+                <button key={q} className="chip" onClick={() => send(q)}>
                   {q}
                 </button>
               ))}
@@ -130,6 +210,13 @@ export default function ChatRoom({ character }) {
       <div className="composer">
         <div className="container">
           {error && <div className="error-banner">{error}</div>}
+          {!historyLoading && !user && messages.length > 0 && (
+            <div className="save-hint">
+              <Link href="/entrar">Entre</Link> ou{" "}
+              <Link href="/cadastro">crie uma conta</Link> para salvar esta
+              conversa.
+            </div>
+          )}
           <div className="composer-inner">
             <textarea
               ref={textareaRef}

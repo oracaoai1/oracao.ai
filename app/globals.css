@@ -635,6 +635,42 @@ h3 {
   margin-top: 10px;
 }
 
+/* Botão "Nova conversa" no cabeçalho do chat. */
+.chat-header .new-chat {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+}
+.chat-header .new-chat:hover {
+  border-color: var(--gold);
+  color: var(--navy-deep);
+}
+
+/* Aviso para deslogados poderem salvar a conversa. */
+.save-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: var(--parchment-deep);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 9px 14px;
+  margin-bottom: 10px;
+}
+.save-hint a {
+  color: var(--gold);
+  font-weight: 600;
+}
+
 .error-banner {
   background: #fbe7e7;
   border: 1px solid #e0b4b4;
@@ -656,4 +692,125 @@ h3 {
   .section {
     padding: 56px 0;
   }
+}
+
+/* ---------- Auth (entrar / cadastro) ---------- */
+.auth-wrap {
+  min-height: calc(100vh - 70px);
+  display: grid;
+  place-items: center;
+  padding: 48px 24px 72px;
+}
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 36px 32px;
+}
+.auth-card h1 {
+  font-size: 1.6rem;
+  margin-bottom: 6px;
+}
+.auth-sub {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  margin: 0 0 24px;
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.field input {
+  font-family: var(--sans);
+  font-size: 1rem;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--parchment);
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.18);
+}
+.auth-form .btn {
+  justify-content: center;
+  width: 100%;
+  margin-top: 4px;
+}
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+.auth-alt {
+  margin-top: 22px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.auth-alt a {
+  color: var(--gold);
+  font-weight: 600;
+}
+.auth-msg {
+  border-radius: 12px;
+  padding: 11px 15px;
+  font-size: 0.9rem;
+}
+.auth-msg.error {
+  background: #fdeeee;
+  border: 1px solid #e0b4b4;
+  color: #8a2a2a;
+}
+.auth-msg.ok {
+  background: #eef6ee;
+  border: 1px solid #b4d4b4;
+  color: #2a6a2a;
+}
+
+/* Estado de autenticação na barra superior. */
+.auth-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.auth-nav .who {
+  color: var(--ink-soft);
+}
+.auth-nav .link-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink-soft);
+  padding: 0;
+}
+.auth-nav .link-btn:hover {
+  color: var(--navy-deep);
+}
+.auth-nav .pill {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: #2b2010;
+  font-weight: 600;
 }

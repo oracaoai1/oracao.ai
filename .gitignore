@@ -23,3 +23,8 @@ yarn-error.log*
 # os
 .DS_Store
 Thumbs.db
+
+# supabase (CLI local)
+/supabase/.branches
+/supabase/.temp
+.supabase

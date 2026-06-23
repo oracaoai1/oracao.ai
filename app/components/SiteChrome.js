@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AuthNav from "./AuthNav";
 
 export function TopBar() {
   return (
@@ -15,6 +16,7 @@ export function TopBar() {
           <Link href="/#como-funciona">Como funciona</Link>
           <Link href="/sobre">Sobre</Link>
         </nav>
+        <AuthNav />
       </div>
     </header>
   );
