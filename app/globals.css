@@ -709,6 +709,149 @@ h3 {
   transform: none;
 }
 
+/* ---------- Intenções de oração ---------- */
+.field textarea,
+.field select {
+  font-family: var(--sans);
+  font-size: 1rem;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--parchment);
+  color: var(--ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field textarea {
+  resize: vertical;
+  min-height: 76px;
+}
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.18);
+}
+.intention-form {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.intention-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+}
+.intention-row .btn {
+  white-space: nowrap;
+}
+.intention-muted {
+  color: var(--ink-soft);
+}
+.intention-gate {
+  background: var(--parchment-deep);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  color: var(--ink-soft);
+}
+.intention-gate a {
+  color: var(--gold);
+  font-weight: 600;
+}
+.intention-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.intention {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.intention.is-answered {
+  border-left-color: #3f6f3a;
+  opacity: 0.85;
+}
+.intention.is-answered .intention-body {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+}
+.intention-main {
+  min-width: 0;
+}
+.intention-body {
+  margin: 0 0 6px;
+  white-space: pre-wrap;
+}
+.intention-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.badge-answered {
+  color: #3f6f3a;
+  font-weight: 600;
+}
+.intention-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.intention-actions .link-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold);
+  padding: 0;
+  text-align: right;
+}
+.intention-actions .link-btn:hover {
+  color: var(--navy-deep);
+}
+.intention-actions .link-btn.danger {
+  color: #a04040;
+}
+.intention-actions .link-btn.danger:hover {
+  color: #7a2a2a;
+}
+
+@media (max-width: 560px) {
+  .intention-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .intention {
+    flex-direction: column;
+  }
+  .intention-actions {
+    flex-direction: row;
+  }
+  .intention-actions .link-btn {
+    text-align: left;
+  }
+}
+
 /* Aviso para deslogados poderem salvar a conversa. */
 .save-hint {
   text-align: center;

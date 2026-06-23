@@ -60,6 +60,7 @@ export default function AuthNav() {
 
   return (
     <div className="auth-nav">
+      <Link href="/intencoes">Intenções</Link>
       <span className="who">Olá, {nome}</span>
       <button className="link-btn" onClick={signOut}>
         Sair
