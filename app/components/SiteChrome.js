@@ -5,11 +5,8 @@ export function TopBar() {
   return (
     <header className="topbar">
       <div className="container topbar-inner">
-        <Link href="/" className="brand">
-          <span className="mark">✝</span>
-          <span>
-            Oração<span className="dim">.AI</span>
-          </span>
+        <Link href="/" className="brand brand-logo" aria-label="Oração.AI — início">
+          <img src="/logo-oracao.png" alt="Oração.AI" />
         </Link>
         <nav className="nav">
           <Link href="/#personagens">Personagens</Link>
@@ -27,11 +24,8 @@ export function Footer() {
     <footer className="footer">
       <div className="container">
         <div className="footer-inner">
-          <div className="brand" style={{ color: "var(--parchment)" }}>
-            <span className="mark">✝</span>
-            <span>
-              Oração<span className="dim">.AI</span>
-            </span>
+          <div className="brand brand-logo">
+            <img src="/logo-oracao.png" alt="Oração.AI" />
           </div>
           <div>
             © {new Date().getFullYear()} Oração.AI — Ad maiorem Dei gloriam

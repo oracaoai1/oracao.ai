@@ -98,6 +98,23 @@ h3 {
 .brand .dim {
   color: var(--gold);
 }
+/* Logo em imagem (substitui a marca textual). */
+.brand-logo {
+  gap: 0;
+}
+.brand-logo img {
+  display: block;
+  height: 50px;
+  width: auto;
+}
+.footer .brand-logo img {
+  height: 56px;
+}
+@media (max-width: 720px) {
+  .brand-logo img {
+    height: 42px;
+  }
+}
 .nav {
   display: flex;
   gap: 28px;
