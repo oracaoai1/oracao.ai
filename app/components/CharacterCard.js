@@ -31,22 +31,40 @@ export default function CharacterCard({
 }) {
   return (
     <Link href={`/chat/${character.id}`} className="card">
-      {onToggleFavorite && (
-        <FavoriteHeart
-          active={isFavorite}
-          onToggle={() => onToggleFavorite(character.id)}
-        />
-      )}
-      <Avatar character={character} />
-      <div className="cat">{character.category}</div>
-      <h3>{character.name}</h3>
-      {character.title && <div className="role">{character.title}</div>}
-      {character.short && <p className="desc">{character.short}</p>}
-      <div className="meta">
-        <span>{character.era || "Tradição da Igreja"}</span>
-        {character.feast && <span>Festa: {character.feast}</span>}
+      <div className="card-media">
+        {character.image ? (
+          <img
+            src={character.image}
+            alt={character.name}
+            className="card-img"
+            loading="lazy"
+          />
+        ) : (
+          <div
+            className="card-media-fallback"
+            style={{ background: character.accent }}
+          >
+            {initials(character.name)}
+          </div>
+        )}
+        {onToggleFavorite && (
+          <FavoriteHeart
+            active={isFavorite}
+            onToggle={() => onToggleFavorite(character.id)}
+          />
+        )}
       </div>
-      <span className="card-cta">Conversar →</span>
+      <div className="card-body">
+        <div className="cat">{character.category}</div>
+        <h3>{character.name}</h3>
+        {character.title && <div className="role">{character.title}</div>}
+        {character.short && <p className="desc">{character.short}</p>}
+        <div className="meta">
+          <span>{character.era || "Tradição da Igreja"}</span>
+          {character.feast && <span>Festa: {character.feast}</span>}
+        </div>
+        <span className="card-cta">Conversar →</span>
+      </div>
     </Link>
   );
 }
