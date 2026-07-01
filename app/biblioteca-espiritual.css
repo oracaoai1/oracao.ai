@@ -1,0 +1,234 @@
+
+/* ============================================================
+   BIBLIOTECA ESPIRITUAL
+   ============================================================ */
+
+/* -- Link sem estilo que envolve o card -- */
+.artigo-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+/* -- Card de artigo -- */
+.artigo-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: transform 0.16s, box-shadow 0.16s, border-color 0.16s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.artigo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(27, 42, 74, 0.14);
+  border-color: var(--gold);
+}
+
+.artigo-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+.artigo-titulo {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--navy-deep);
+  margin: 0;
+  line-height: 1.25;
+}
+.artigo-desc {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.65;
+  flex: 1;
+  margin: 0;
+}
+.artigo-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+}
+.artigo-data { font-size: 0.78rem; color: rgba(91,76,58,0.5); }
+.artigo-ler  { font-size: 0.88rem; color: var(--gold); font-weight: 600; }
+
+/* -- Grade da listagem -- */
+.biblioteca-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 22px;
+}
+
+/* -- Página de artigo -- */
+.artigo-page-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+.artigo-breadcrumb {
+  padding: 20px 0 0;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.artigo-breadcrumb a { color: var(--gold); }
+.artigo-breadcrumb-sep { color: var(--line); }
+
+.artigo-header {
+  text-align: center;
+  padding: 32px 0 28px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 36px;
+}
+.artigo-categoria-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.artigo-titulo-wrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.artigo-inicial {
+  font-family: var(--serif);
+  font-size: clamp(60px, 9vw, 84px);
+  font-weight: 700;
+  color: var(--gold-bright);
+  line-height: 0.8;
+  display: inline-block;
+  margin-right: 2px;
+}
+.artigo-h1 {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+  color: var(--navy-deep);
+  margin: 0;
+  line-height: 1.2;
+  display: inline;
+}
+.artigo-desc-header {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin: 0 0 12px;
+  line-height: 1.7;
+}
+.artigo-meta-date {
+  font-size: 0.78rem;
+  color: rgba(91,76,58,0.55);
+}
+.artigo-audio {
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+}
+
+/* -- Corpo do artigo -- */
+.artigo-body p {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+.artigo-verso {
+  font-style: italic;
+  color: var(--navy);
+  border-left: 3px solid var(--gold);
+  padding: 5px 0 5px 18px;
+  margin: 2px 0 2px 0 !important;
+  background: rgba(184,134,11,0.04);
+  border-radius: 0 6px 6px 0;
+}
+.artigo-secao {
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 34px 0 10px !important;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--line);
+}
+
+.artigo-voltar {
+  display: inline-block;
+  margin-top: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 0.9rem;
+  color: var(--gold);
+  font-weight: 600;
+  transition: border-color 0.15s;
+}
+.artigo-voltar:hover { border-color: var(--gold); }
+
+/* -- Botão idle do AudioPlayer -- */
+.btn-audio-idle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-audio-idle:hover { background: rgba(184,134,11,0.06); }
+
+/* -- Divisor ornamental -- */
+.artigo-divisor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+.artigo-divisor-linha {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.artigo-divisor-ornato {
+  color: var(--gold);
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+@media (max-width: 620px) {
+  .biblioteca-grid { grid-template-columns: 1fr; }
+  .artigo-inicial  { font-size: 52px; }
+}
