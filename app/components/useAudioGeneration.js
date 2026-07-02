@@ -7,16 +7,19 @@ export function useAudioGeneration() {
   const [error,    setError]    = useState(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const [isCached, setIsCached] = useState(false);
+  const [speed,    setSpeed]    = useState(1);
   const blobRef = useRef(null);
 
-  const generate = useCallback(async (text, voiceId) => {
+  // opts: { characterId } (voz/config do santo, resolvidos no servidor) OU
+  //       { voiceId, stability, similarity_boost, style, speed } (prévia do estúdio).
+  const generate = useCallback(async (text, opts = {}) => {
     if (blobRef.current) { URL.revokeObjectURL(blobRef.current); blobRef.current = null; }
     setStatus('loading'); setError(null); setAudioUrl(null); setIsCached(false);
     try {
       const res = await fetch('/api/generate-audio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, voiceId }),
+        body: JSON.stringify({ text, ...opts }),
       });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
@@ -27,6 +30,7 @@ export function useAudioGeneration() {
         const data = await res.json();
         setAudioUrl(data.url);
         setIsCached(data.cached === true);
+        if (data.speed) setSpeed(data.speed);
       } else {
         const blob = await res.blob();
         const url  = URL.createObjectURL(blob);
@@ -39,8 +43,8 @@ export function useAudioGeneration() {
 
   const reset = useCallback(() => {
     if (blobRef.current) { URL.revokeObjectURL(blobRef.current); blobRef.current = null; }
-    setAudioUrl(null); setStatus('idle'); setError(null); setIsCached(false);
+    setAudioUrl(null); setStatus('idle'); setError(null); setIsCached(false); setSpeed(1);
   }, []);
 
-  return { status, error, audioUrl, isCached, generate, reset };
+  return { status, error, audioUrl, isCached, speed, generate, reset };
 }

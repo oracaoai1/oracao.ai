@@ -13,11 +13,9 @@ import FavoriteHeart from "@/app/components/FavoriteHeart";
 import { getFavoriteIds, addFavorite, removeFavorite } from "@/lib/favorites";
 import MessageAudioButton from "@/app/components/MessageAudioButton";
 import MicButton from "@/app/components/MicButton";
-import { getVoiceId } from "@/lib/voices";
 
 export default function ChatRoom({ character }) {
   const greeting = `A paz esteja contigo! Sou ${character.name}. Sobre o que gostaria de conversar?`;
-  const voiceId = getVoiceId(character.id);
 
   // `messages` guarda APENAS o diálogo real (user/assistant). A saudação é
   // renderizada separadamente, fora do array — assim o histórico carregado do
@@ -241,7 +239,7 @@ export default function ChatRoom({ character }) {
               <Avatar character={character} className="mini-avatar" />
               <div className="bubble-col">
                 <div className="bubble">{greeting}</div>
-                <MessageAudioButton text={greeting} voiceId={voiceId} />
+                <MessageAudioButton text={greeting} characterId={character.id} />
               </div>
             </div>
 
@@ -253,7 +251,7 @@ export default function ChatRoom({ character }) {
                     <div className="bubble">{m.content}</div>
                     <MessageAudioButton
                       text={m.content}
-                      voiceId={voiceId}
+                      characterId={character.id}
                       autoStart={m.auto}
                     />
                   </div>

@@ -21,8 +21,8 @@ function Pause() {
   );
 }
 
-export default function MessageAudioButton({ text, voiceId, autoStart = false }) {
-  const { status, audioUrl, generate } = useAudioGeneration();
+export default function MessageAudioButton({ text, characterId, autoStart = false }) {
+  const { status, audioUrl, speed, generate } = useAudioGeneration();
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const wantPlay = useRef(false);
@@ -33,29 +33,38 @@ export default function MessageAudioButton({ text, voiceId, autoStart = false })
     if (autoStart && !started.current && text) {
       started.current = true;
       wantPlay.current = true;
-      generate(text, voiceId);
+      generate(text, { characterId });
     }
-  }, [autoStart, text, voiceId, generate]);
+  }, [autoStart, text, characterId, generate]);
+
+  // Aplica a velocidade de reprodução configurada para o santo.
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.playbackRate = speed || 1;
+  }, [audioUrl, speed]);
 
   // Assim que o áudio fica pronto e havia intenção de tocar, toca.
   useEffect(() => {
     if (status === "ready" && audioUrl && wantPlay.current) {
       wantPlay.current = false;
+      if (audioRef.current) audioRef.current.playbackRate = speed || 1;
       audioRef.current?.play().catch(() => {});
     }
-  }, [status, audioUrl]);
+  }, [status, audioUrl, speed]);
 
   function onClick() {
     if (status === "loading") return;
     if (status === "idle" || status === "error" || !audioUrl) {
       wantPlay.current = true;
-      generate(text, voiceId);
+      generate(text, { characterId });
       return;
     }
     const a = audioRef.current;
     if (!a) return;
     if (playing) a.pause();
-    else a.play().catch(() => {});
+    else {
+      a.playbackRate = speed || 1;
+      a.play().catch(() => {});
+    }
   }
 
   const loading = status === "loading";
