@@ -1243,6 +1243,51 @@ h3 {
   color: #2a6a2a;
 }
 
+/* Campo de senha com botão mostrar/ocultar */
+.password-wrap {
+  position: relative;
+}
+.password-wrap input {
+  width: 100%;
+  padding-right: 44px;
+}
+.reveal-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-soft);
+  padding: 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+}
+.reveal-btn:hover {
+  color: var(--navy-deep);
+}
+.auth-forgot {
+  margin-top: -6px;
+  text-align: right;
+  font-size: 0.85rem;
+}
+.auth-forgot a {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* Minha conta */
+.conta-email {
+  color: var(--ink-soft);
+  margin: 0 0 20px;
+}
+.conta-h2 {
+  font-size: 1.15rem;
+  margin: 0 0 2px;
+}
+
 /* Estado de autenticação na barra superior. */
 .auth-nav {
   display: flex;

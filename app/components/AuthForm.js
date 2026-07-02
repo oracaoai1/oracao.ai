@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import PasswordField from "./PasswordField";
 
 // Formulário compartilhado de autenticação por e-mail/senha.
 // mode: "entrar" (login) | "cadastro" (criar conta).
@@ -96,19 +97,21 @@ export default function AuthForm({ mode }) {
         />
       </div>
 
-      <div className="field">
-        <label htmlFor="password">Senha</label>
-        <input
-          id="password"
-          type="password"
-          required
-          minLength={6}
-          autoComplete={isSignup ? "new-password" : "current-password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder={isSignup ? "Mínimo de 6 caracteres" : "Sua senha"}
-        />
-      </div>
+      <PasswordField
+        id="password"
+        label="Senha"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        minLength={6}
+        autoComplete={isSignup ? "new-password" : "current-password"}
+        placeholder={isSignup ? "Mínimo de 6 caracteres" : "Sua senha"}
+      />
+
+      {!isSignup && (
+        <div className="auth-forgot">
+          <Link href="/recuperar-senha">Esqueci minha senha</Link>
+        </div>
+      )}
 
       <button className="btn btn-gold" type="submit" disabled={loading}>
         {loading
