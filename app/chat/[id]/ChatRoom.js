@@ -12,6 +12,7 @@ import {
 import FavoriteHeart from "@/app/components/FavoriteHeart";
 import { getFavoriteIds, addFavorite, removeFavorite } from "@/lib/favorites";
 import MessageAudioButton from "@/app/components/MessageAudioButton";
+import MessageImageButton from "@/app/components/MessageImageButton";
 import MicButton from "@/app/components/MicButton";
 
 export default function ChatRoom({ character }) {
@@ -254,6 +255,13 @@ export default function ChatRoom({ character }) {
                       characterId={character.id}
                       autoStart={m.auto}
                     />
+                    {user && (
+                      <MessageImageButton
+                        characterId={character.id}
+                        text={m.content}
+                        conversationId={conversationIdRef.current}
+                      />
+                    )}
                   </div>
                 </div>
               ) : (
