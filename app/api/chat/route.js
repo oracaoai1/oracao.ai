@@ -1,5 +1,11 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getCharacter, buildSystemPrompt } from "@/lib/characters";
+import { createClient } from "@/lib/supabase/server";
+import {
+  consumeUsage,
+  CHAT_DAILY_LIMIT,
+  CHAT_MAX_MESSAGE_CHARS,
+} from "@/lib/usageLimits";
 
 export const runtime = "nodejs";
 
@@ -10,6 +16,18 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001";
 const MAX_TOKENS = 1024;
 
 export async function POST(req) {
+  // Rota protegida: exige sessão. Evita consumo anônimo da API.
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return Response.json(
+      { error: "Faça login para conversar com os santos." },
+      { status: 401 }
+    );
+  }
+
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json(
       {
@@ -43,11 +61,27 @@ export async function POST(req) {
     );
   }
 
-  // Mantém apenas papéis válidos e limita o histórico enviado ao modelo.
+  // Limite diário por usuário (contador atômico no Supabase).
+  const allowed = await consumeUsage(supabase, "chat", CHAT_DAILY_LIMIT);
+  if (!allowed) {
+    return Response.json(
+      { error: "Você atingiu o limite diário de mensagens. Volte amanhã. 🙏" },
+      { status: 429 }
+    );
+  }
+
+  // Mantém apenas papéis válidos, limita o histórico e o tamanho de cada
+  // mensagem (proteção de custo — trunca em vez de rejeitar).
   const history = messages
     .filter((m) => m && (m.role === "user" || m.role === "assistant") && m.content)
     .slice(-20)
-    .map((m) => ({ role: m.role, content: String(m.content) }));
+    .map((m) => ({
+      role: m.role,
+      content: String(m.content).slice(
+        0,
+        m.role === "user" ? CHAT_MAX_MESSAGE_CHARS : 4000
+      ),
+    }));
 
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 

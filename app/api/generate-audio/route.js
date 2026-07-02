@@ -1,6 +1,8 @@
 // app/api/generate-audio/route.js
 import { NextResponse } from 'next/server';
 import { getCachedAudioUrl, cacheAudio } from '@/lib/audioCache';
+import { createClient } from '@/lib/supabase/server';
+import { consumeUsage, AUDIO_DAILY_LIMIT } from '@/lib/usageLimits';
 import {
   getVoiceConfig,
   settingsSig,
@@ -40,8 +42,28 @@ export async function POST(request) {
 
     const sig = settingsSig({ stability, similarity_boost, style });
 
+    // Cache é público (Biblioteca continua acessível a visitantes)…
     const cachedUrl = await getCachedAudioUrl(text, voice, sig);
     if (cachedUrl) return NextResponse.json({ url: cachedUrl, cached: true, speed });
+
+    // …mas GERAR áudio novo exige login + respeita a cota diária.
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Faça login para gerar novas narrações.' },
+        { status: 401 }
+      );
+    }
+    const allowed = await consumeUsage(supabase, 'audio', AUDIO_DAILY_LIMIT);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: 'Você atingiu o limite diário de narrações. Volte amanhã. 🙏' },
+        { status: 429 }
+      );
+    }
 
     const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice}`, {
       method: 'POST',
