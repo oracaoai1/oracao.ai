@@ -9,14 +9,14 @@ export function useAudioGeneration() {
   const [isCached, setIsCached] = useState(false);
   const blobRef = useRef(null);
 
-  const generate = useCallback(async (text) => {
+  const generate = useCallback(async (text, voiceId) => {
     if (blobRef.current) { URL.revokeObjectURL(blobRef.current); blobRef.current = null; }
     setStatus('loading'); setError(null); setAudioUrl(null); setIsCached(false);
     try {
       const res = await fetch('/api/generate-audio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, voiceId }),
       });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));

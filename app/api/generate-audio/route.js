@@ -7,15 +7,18 @@ const ELEVENLABS_VOICE_ID = process.env.ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSD
 
 export async function POST(request) {
   try {
-    const { text } = await request.json();
+    const { text, voiceId } = await request.json();
     if (!text?.trim()) return NextResponse.json({ error: 'Texto inválido.' }, { status: 400 });
     if (text.length > 5000) return NextResponse.json({ error: 'Texto muito longo.' }, { status: 400 });
     if (!ELEVENLABS_API_KEY) return NextResponse.json({ error: 'Áudio não configurado.' }, { status: 500 });
 
-    const cachedUrl = await getCachedAudioUrl(text);
+    // Voz por personagem (opcional). Valida o formato para evitar injeção na URL.
+    const voice = /^[A-Za-z0-9]{16,32}$/.test(voiceId || '') ? voiceId : ELEVENLABS_VOICE_ID;
+
+    const cachedUrl = await getCachedAudioUrl(text, voice);
     if (cachedUrl) return NextResponse.json({ url: cachedUrl, cached: true });
 
-    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`, {
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice}`, {
       method: 'POST',
       headers: { 'xi-api-key': ELEVENLABS_API_KEY, 'Content-Type': 'application/json', Accept: 'audio/mpeg' },
       body: JSON.stringify({ text, model_id: 'eleven_multilingual_v2',
@@ -28,7 +31,7 @@ export async function POST(request) {
     }
 
     const audioBuffer = Buffer.from(await res.arrayBuffer());
-    const savedUrl = await cacheAudio(text, audioBuffer);
+    const savedUrl = await cacheAudio(text, audioBuffer, voice);
     if (savedUrl) return NextResponse.json({ url: savedUrl, cached: false });
 
     return new Response(audioBuffer, { headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': 'no-store' } });

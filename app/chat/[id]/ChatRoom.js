@@ -11,9 +11,13 @@ import {
 } from "@/lib/conversations";
 import FavoriteHeart from "@/app/components/FavoriteHeart";
 import { getFavoriteIds, addFavorite, removeFavorite } from "@/lib/favorites";
+import MessageAudioButton from "@/app/components/MessageAudioButton";
+import MicButton from "@/app/components/MicButton";
+import { getVoiceId } from "@/lib/voices";
 
 export default function ChatRoom({ character }) {
   const greeting = `A paz esteja contigo! Sou ${character.name}. Sobre o que gostaria de conversar?`;
+  const voiceId = getVoiceId(character.id);
 
   // `messages` guarda APENAS o diálogo real (user/assistant). A saudação é
   // renderizada separadamente, fora do array — assim o histórico carregado do
@@ -27,6 +31,8 @@ export default function ChatRoom({ character }) {
   const [user, setUser] = useState(null);
   const [historyLoading, setHistoryLoading] = useState(true);
   const [isFav, setIsFav] = useState(false);
+  const [autoPlay, setAutoPlay] = useState(false);
+  const autoPlayRef = useRef(false);
   const conversationIdRef = useRef(null);
 
   const scrollRef = useRef(null);
@@ -69,6 +75,26 @@ export default function ChatRoom({ character }) {
     };
   }, [supabase, character.id]);
 
+  // Preferência de auto-narração (persistida no navegador).
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem("oracao-autoplay") === "1";
+      setAutoPlay(v);
+      autoPlayRef.current = v;
+    } catch {}
+  }, []);
+
+  function toggleAutoPlay() {
+    setAutoPlay((prev) => {
+      const next = !prev;
+      autoPlayRef.current = next;
+      try {
+        localStorage.setItem("oracao-autoplay", next ? "1" : "0");
+      } catch {}
+      return next;
+    });
+  }
+
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
@@ -105,7 +131,10 @@ export default function ChatRoom({ character }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erro ao conversar.");
       reply = data.reply;
-      setMessages((m) => [...m, { role: "assistant", content: reply }]);
+      setMessages((m) => [
+        ...m,
+        { role: "assistant", content: reply, auto: autoPlayRef.current },
+      ]);
     } catch (err) {
       setError(err.message);
       setLoading(false);
@@ -176,20 +205,31 @@ export default function ChatRoom({ character }) {
               </div>
             </div>
           </div>
-          {user && (
-            <div className="chat-actions">
-              <FavoriteHeart
-                active={isFav}
-                onToggle={toggleFavorite}
-                className="chat-fav"
-              />
-              {messages.length > 0 && (
-                <button className="new-chat" onClick={newConversation}>
-                  ＋ Nova conversa
-                </button>
-              )}
-            </div>
-          )}
+          <div className="chat-actions">
+            <button
+              type="button"
+              className={`autoplay-toggle ${autoPlay ? "is-on" : ""}`}
+              onClick={toggleAutoPlay}
+              aria-pressed={autoPlay}
+              title="Narrar automaticamente as respostas com a voz do personagem"
+            >
+              {autoPlay ? "🔊" : "🔇"} Auto-narração
+            </button>
+            {user && (
+              <>
+                <FavoriteHeart
+                  active={isFav}
+                  onToggle={toggleFavorite}
+                  className="chat-fav"
+                />
+                {messages.length > 0 && (
+                  <button className="new-chat" onClick={newConversation}>
+                    ＋ Nova conversa
+                  </button>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -199,17 +239,31 @@ export default function ChatRoom({ character }) {
             {/* Saudação fixa (não faz parte do diálogo persistido). */}
             <div className="msg assistant">
               <Avatar character={character} className="mini-avatar" />
-              <div className="bubble">{greeting}</div>
+              <div className="bubble-col">
+                <div className="bubble">{greeting}</div>
+                <MessageAudioButton text={greeting} voiceId={voiceId} />
+              </div>
             </div>
 
-            {messages.map((m, i) => (
-              <div key={i} className={`msg ${m.role}`}>
-                {m.role === "assistant" && (
+            {messages.map((m, i) =>
+              m.role === "assistant" ? (
+                <div key={i} className="msg assistant">
                   <Avatar character={character} className="mini-avatar" />
-                )}
-                <div className="bubble">{m.content}</div>
-              </div>
-            ))}
+                  <div className="bubble-col">
+                    <div className="bubble">{m.content}</div>
+                    <MessageAudioButton
+                      text={m.content}
+                      voiceId={voiceId}
+                      autoStart={m.auto}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div key={i} className="msg user">
+                  <div className="bubble">{m.content}</div>
+                </div>
+              )
+            )}
             {loading && (
               <div className="msg assistant">
                 <Avatar character={character} className="mini-avatar" />
@@ -247,10 +301,18 @@ export default function ChatRoom({ character }) {
             </div>
           )}
           <div className="composer-inner">
+            <MicButton
+              disabled={loading}
+              onTranscript={(t) => {
+                setInput((prev) => (prev ? prev.trim() + " " : "") + t);
+                requestAnimationFrame(autoGrow);
+                textareaRef.current?.focus();
+              }}
+            />
             <textarea
               ref={textareaRef}
               value={input}
-              placeholder={`Escreva sua mensagem para ${character.name.split(" ")[0]}...`}
+              placeholder={`Escreva ou fale sua mensagem para ${character.name.split(" ")[0]}...`}
               rows={1}
               onChange={(e) => {
                 setInput(e.target.value);
