@@ -13,6 +13,7 @@ import FavoriteHeart from "@/app/components/FavoriteHeart";
 import { getFavoriteIds, addFavorite, removeFavorite } from "@/lib/favorites";
 import MessageAudioButton from "@/app/components/MessageAudioButton";
 import MessageImageButton from "@/app/components/MessageImageButton";
+import ScenesPanel from "@/app/components/ScenesPanel";
 import MicButton from "@/app/components/MicButton";
 
 export default function ChatRoom({ character }) {
@@ -31,6 +32,7 @@ export default function ChatRoom({ character }) {
   const [historyLoading, setHistoryLoading] = useState(true);
   const [isFav, setIsFav] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
+  const [scenesOpen, setScenesOpen] = useState(false);
   const autoPlayRef = useRef(false);
   const conversationIdRef = useRef(null);
 
@@ -190,6 +192,12 @@ export default function ChatRoom({ character }) {
 
   return (
     <div className="chat-page">
+      <ScenesPanel
+        characterId={character.id}
+        characterName={character.name}
+        open={scenesOpen}
+        onClose={() => setScenesOpen(false)}
+      />
       <header className="chat-header">
         <div className="container chat-header-inner">
           <Link href="/#personagens" className="back">
@@ -205,6 +213,14 @@ export default function ChatRoom({ character }) {
             </div>
           </div>
           <div className="chat-actions">
+            <button
+              type="button"
+              className="autoplay-toggle"
+              onClick={() => setScenesOpen(true)}
+              title="Ver cenas em vídeo deste santo"
+            >
+              🎬 Cenas
+            </button>
             <button
               type="button"
               className={`autoplay-toggle ${autoPlay ? "is-on" : ""}`}
