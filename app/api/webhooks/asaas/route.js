@@ -6,14 +6,17 @@ import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 
 export const runtime = "nodejs";
 
-// Dias de acesso concedidos por pagamento confirmado (com folga de 3 dias
-// para o ciclo seguinte compensar).
+// Dias de acesso por pagamento confirmado (folga de 3 dias para o ciclo
+// seguinte compensar; anual ganha folga proporcional).
 const PERIOD_DAYS = { mensal: 33, anual: 368 };
 
-function periodEnd(plan) {
-  const days = PERIOD_DAYS[plan] || PERIOD_DAYS.mensal;
+function periodEnd(cycle) {
+  const days = PERIOD_DAYS[cycle] || PERIOD_DAYS.mensal;
   return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
 }
+
+// Pacotes de Velas válidos (espelha lib/plans.js; valida o externalReference).
+const PACOTES_VELAS = { p10: 10, p30: 30, p60: 60, p120: 120 };
 
 export async function POST(request) {
   const token = request.headers.get("asaas-access-token");
@@ -29,20 +32,44 @@ export async function POST(request) {
   const admin = getSupabaseAdmin();
   const type = event.event;
 
-  // Eventos de cobrança vêm com payment.subscription (id da assinatura).
+  // ── Pacotes de Velas (pagamento único, sem assinatura) ──────────────────
+  const extRef = event.payment?.externalReference || "";
+  if (!event.payment?.subscription && extRef.startsWith("velas:")) {
+    if (type === "PAYMENT_CONFIRMED" || type === "PAYMENT_RECEIVED") {
+      const [, pacoteId, userId] = extRef.split(":");
+      const velas = PACOTES_VELAS[pacoteId];
+      if (velas && userId) {
+        // Idempotente: reference = id do pagamento (índice único no ledger).
+        const { data, error } = await admin.rpc("grant_velas", {
+          p_user: userId,
+          p_amount: velas,
+          p_kind: "purchase",
+          p_reference: event.payment.id,
+        });
+        if (error) {
+          console.error("[webhook asaas] grant velas:", error.message);
+          return NextResponse.json({ error: "Falha ao creditar." }, { status: 500 });
+        }
+        return NextResponse.json({ received: true, credited: data === true });
+      }
+    }
+    return NextResponse.json({ received: true, ignored: true });
+  }
+
+  // ── Assinaturas ─────────────────────────────────────────────────────────
   const subId = event.payment?.subscription || event.subscription?.id;
   if (!subId) return NextResponse.json({ received: true, ignored: true });
 
   const { data: row } = await admin
     .from("subscriptions")
-    .select("user_id, plan")
+    .select("user_id, tier, cycle")
     .eq("asaas_subscription_id", subId)
     .maybeSingle();
   if (!row) return NextResponse.json({ received: true, unknown: true });
 
   let patch = null;
   if (type === "PAYMENT_CONFIRMED" || type === "PAYMENT_RECEIVED") {
-    patch = { status: "active", current_period_end: periodEnd(row.plan) };
+    patch = { status: "active", current_period_end: periodEnd(row.cycle) };
   } else if (type === "PAYMENT_OVERDUE") {
     patch = { status: "past_due" };
   } else if (
