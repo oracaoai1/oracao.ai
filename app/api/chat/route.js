@@ -1,9 +1,11 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { getCharacter, buildSystemPrompt } from "@/lib/characters";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveSubscription } from "@/lib/subscription";
 import {
   consumeUsage,
   CHAT_DAILY_LIMIT,
+  CHAT_DAILY_LIMIT_PREMIUM,
   CHAT_MAX_MESSAGE_CHARS,
 } from "@/lib/usageLimits";
 
@@ -62,10 +64,17 @@ export async function POST(req) {
   }
 
   // Limite diário por usuário (contador atômico no Supabase).
-  const allowed = await consumeUsage(supabase, "chat", CHAT_DAILY_LIMIT);
+  // Assinantes premium têm cota maior.
+  const premium = await getActiveSubscription(supabase, user.id);
+  const dailyLimit = premium ? CHAT_DAILY_LIMIT_PREMIUM : CHAT_DAILY_LIMIT;
+  const allowed = await consumeUsage(supabase, "chat", dailyLimit);
   if (!allowed) {
     return Response.json(
-      { error: "Você atingiu o limite diário de mensagens. Volte amanhã. 🙏" },
+      {
+        error: premium
+          ? "Você atingiu o limite diário de mensagens. Volte amanhã. 🙏"
+          : "Você atingiu o limite gratuito de hoje. Assine o Premium em /assinar para continuar. 🙏",
+      },
       { status: 429 }
     );
   }

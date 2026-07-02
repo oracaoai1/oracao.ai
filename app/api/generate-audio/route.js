@@ -2,7 +2,12 @@
 import { NextResponse } from 'next/server';
 import { getCachedAudioUrl, cacheAudio } from '@/lib/audioCache';
 import { createClient } from '@/lib/supabase/server';
-import { consumeUsage, AUDIO_DAILY_LIMIT } from '@/lib/usageLimits';
+import { getActiveSubscription } from '@/lib/subscription';
+import {
+  consumeUsage,
+  AUDIO_DAILY_LIMIT,
+  AUDIO_DAILY_LIMIT_PREMIUM,
+} from '@/lib/usageLimits';
 import {
   getVoiceConfig,
   settingsSig,
@@ -57,10 +62,16 @@ export async function POST(request) {
         { status: 401 }
       );
     }
-    const allowed = await consumeUsage(supabase, 'audio', AUDIO_DAILY_LIMIT);
+    const premium = await getActiveSubscription(supabase, user.id);
+    const dailyLimit = premium ? AUDIO_DAILY_LIMIT_PREMIUM : AUDIO_DAILY_LIMIT;
+    const allowed = await consumeUsage(supabase, 'audio', dailyLimit);
     if (!allowed) {
       return NextResponse.json(
-        { error: 'Você atingiu o limite diário de narrações. Volte amanhã. 🙏' },
+        {
+          error: premium
+            ? 'Você atingiu o limite diário de narrações. Volte amanhã. 🙏'
+            : 'Limite gratuito de narrações atingido. Assine o Premium em /assinar. 🙏',
+        },
         { status: 429 }
       );
     }
