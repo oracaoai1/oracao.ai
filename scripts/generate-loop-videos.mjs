@@ -67,9 +67,9 @@ async function jaExiste(id) {
   return (data || []).some((f) => f.name === `${id}.mp4`);
 }
 
-async function esperar(requestId) {
+async function esperar(statusUrl) {
   for (let i = 0; i < POLL_MAX_TRIES; i++) {
-    const status = await getLoopVideoStatus(requestId);
+    const status = await getLoopVideoStatus(statusUrl);
     if (status === "COMPLETED") return;
     if (status === "ERROR" || status === "FAILED") {
       throw new Error(`Kling retornou status ${status}`);
@@ -83,9 +83,9 @@ async function gerarUm(santo) {
   const imageUrl = `${SITE_URL}/personagens/img-${santo.id}.webp`;
   const prompt = buildLoopPrompt(santo.nome);
 
-  const requestId = await submitLoopVideo({ imageUrl, prompt, durationSeconds: DURATION });
-  await esperar(requestId);
-  const falUrl = await getLoopVideoResult(requestId);
+  const { statusUrl, resultUrl } = await submitLoopVideo({ imageUrl, prompt, durationSeconds: DURATION });
+  await esperar(statusUrl);
+  const falUrl = await getLoopVideoResult(resultUrl);
 
   const res = await fetch(falUrl);
   if (!res.ok) throw new Error(`falha ao baixar vídeo do fal (HTTP ${res.status})`);
