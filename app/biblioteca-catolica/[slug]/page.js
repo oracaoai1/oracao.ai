@@ -1,5 +1,5 @@
-// app/biblioteca-espiritual/[slug]/page.js
-import '../../biblioteca-espiritual.css';
+// app/biblioteca-catolica/[slug]/page.js
+import '../../biblioteca-catolica.css';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getArtigoPorSlug, getAllSlugs, formatarData } from '@/lib/biblioteca';
@@ -17,12 +17,12 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: artigo.titulo,
       description: artigo.descricao,
-      url: `https://www.oracao.ai/biblioteca-espiritual/${artigo.slug}`,
+      url: `https://www.oracao.ai/biblioteca-catolica/${artigo.slug}`,
       type: 'article',
       publishedTime: artigo.publicado_em,
     },
     alternates: {
-      canonical: `https://www.oracao.ai/biblioteca-espiritual/${artigo.slug}`,
+      canonical: `https://www.oracao.ai/biblioteca-catolica/${artigo.slug}`,
     },
   };
 }
@@ -98,7 +98,7 @@ export default async function ArtigoPage({ params }) {
               name: 'Oração.AI',
               url: 'https://www.oracao.ai',
             },
-            url: `https://www.oracao.ai/biblioteca-espiritual/${artigo.slug}`,
+            url: `https://www.oracao.ai/biblioteca-catolica/${artigo.slug}`,
           }),
         }}
       />
@@ -107,7 +107,7 @@ export default async function ArtigoPage({ params }) {
         <nav className="artigo-breadcrumb">
           <Link href="/">Início</Link>
           <span className="artigo-breadcrumb-sep">›</span>
-          <Link href="/biblioteca-espiritual">Biblioteca Espiritual</Link>
+          <Link href="/biblioteca-catolica">Biblioteca Católica</Link>
           <span className="artigo-breadcrumb-sep">›</span>
           <span style={{ opacity: 0.7 }}>{artigo.titulo}</span>
         </nav>
@@ -137,8 +137,8 @@ export default async function ArtigoPage({ params }) {
         <article className="artigo-body">{renderConteudo(artigo.conteudo)}</article>
 
         <div style={{ textAlign: 'center' }}>
-          <Link href="/biblioteca-espiritual" className="artigo-voltar">
-            ← Toda a Biblioteca Espiritual
+          <Link href="/biblioteca-catolica" className="artigo-voltar">
+            ← Toda a Biblioteca Católica
           </Link>
         </div>
       </div>

@@ -1,12 +1,12 @@
-// app/biblioteca-espiritual/page.js
-import '../biblioteca-espiritual.css';
+// app/biblioteca-catolica/page.js
+import '../biblioteca-catolica.css';
 import { getAllArtigos, getCategorias } from '@/lib/biblioteca';
 import ArtigoCard from '@/app/components/ArtigoCard';
 import { TopBar, Footer } from '@/app/components/SiteChrome';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Biblioteca Espiritual — Orações, Salmos e Reflexões',
+  title: 'Biblioteca Católica — Orações, Salmos e Reflexões',
   description:
     'Acervo de orações tradicionais, salmos e reflexões cristãs em português, com narração em áudio.',
 };
@@ -27,7 +27,7 @@ export default async function BibliotecaPage({ searchParams }) {
       <section className="hero">
         <div className="container">
           <p className="eyebrow">Oração.AI</p>
-          <h1>Biblioteca Espiritual</h1>
+          <h1>Biblioteca Católica</h1>
           <p>
             Orações, salmos e reflexões da tradição cristã,
             <br />
@@ -39,8 +39,8 @@ export default async function BibliotecaPage({ searchParams }) {
                 key={cat}
                 href={
                   cat === 'Todas'
-                    ? '/biblioteca-espiritual'
-                    : `/biblioteca-espiritual?categoria=${encodeURIComponent(cat)}`
+                    ? '/biblioteca-catolica'
+                    : `/biblioteca-catolica?categoria=${encodeURIComponent(cat)}`
                 }
                 className={`cat-pill${cat === catAtiva ? ' is-active' : ''}`}
               >
