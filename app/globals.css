@@ -169,14 +169,22 @@ h3 {
   box-shadow: 0 16px 30px rgba(15, 28, 51, 0.15);
   padding: 4px 24px 12px;
 }
-.mobile-nav-panel a {
+.mobile-nav-panel a,
+.mobile-nav-panel .mobile-nav-signout {
+  display: block;
+  width: 100%;
   padding: 14px 0;
+  border: none;
   border-bottom: 1px solid var(--line);
   color: var(--ink-soft);
+  font-family: inherit;
   font-weight: 600;
   font-size: 1.02rem;
+  text-align: left;
+  background: none;
+  cursor: pointer;
 }
-.mobile-nav-panel a:last-child {
+.mobile-nav-panel > *:last-child {
   border-bottom: none;
 }
 @media (max-width: 720px) {
@@ -1398,4 +1406,13 @@ h3 {
   background: linear-gradient(135deg, var(--gold-bright), var(--gold));
   color: #2b2010;
   font-weight: 600;
+}
+
+/* Nomes longos quebram em duas linhas e disputam espaço com o menu
+   hamburguer nessa largura — em telas estreitas essas ações (Intenções,
+   conta, sair / entrar, criar conta) vivem só no menu (ver MobileNav). */
+@media (max-width: 720px) {
+  .auth-nav {
+    display: none;
+  }
 }
