@@ -30,3 +30,6 @@ Thumbs.db
 .supabase
 
 .vercel
+
+# brainstorming visual companion (mockups, not app content)
+.superpowers/
