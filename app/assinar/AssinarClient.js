@@ -93,22 +93,24 @@ export default function AssinarClient() {
         </>
       )}
 
-      <label style={{ display: "grid", gap: 4 }}>
-        <span>CPF (exigido pelo processador de pagamento)</span>
+      <div className="field">
+        <label htmlFor="cpf">CPF (exigido pelo processador de pagamento)</label>
         <input
+          id="cpf"
           value={cpf}
           onChange={(e) => setCpf(e.target.value)}
           placeholder="000.000.000-00"
           inputMode="numeric"
           autoComplete="off"
         />
-      </label>
+      </div>
 
-      {erro && <p style={{ color: "#b3261e" }}>{erro}</p>}
+      {erro && <div className="auth-msg error">{erro}</div>}
 
       {!ativa && (
         <button
           type="button"
+          className="btn btn-gold"
           disabled={carregando}
           onClick={() => post("/api/assinatura", { tier, cycle: ciclo, cpfCnpj: cpf })}
         >

@@ -19,7 +19,7 @@ export default function ArtigoCard({ artigo }) {
   const dataFmt = `${d}/${m}/${a}`;
 
   return (
-    <Link href={`/biblioteca-espiritual/${artigo.slug}`} className="artigo-card-link">
+    <Link href={`/biblioteca-catolica/${artigo.slug}`} className="artigo-card-link">
       <article className="artigo-card">
         <span className="artigo-badge" style={{ background: bg, color: cor }}>
           {artigo.categoria}

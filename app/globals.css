@@ -129,6 +129,62 @@ h3 {
   color: var(--navy-deep);
 }
 
+/* ---------- Menu hamburguer (mobile) ---------- */
+.mobile-nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.mobile-nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--navy-deep);
+}
+.mobile-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 28, 51, 0.35);
+  z-index: 25;
+}
+.mobile-nav-panel {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  background: var(--parchment);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 16px 30px rgba(15, 28, 51, 0.15);
+  padding: 4px 24px 12px;
+}
+.mobile-nav-panel a {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 1.02rem;
+}
+.mobile-nav-panel a:last-child {
+  border-bottom: none;
+}
+@media (max-width: 720px) {
+  .mobile-nav-toggle {
+    display: inline-flex;
+  }
+}
+
 /* ---------- Hero ---------- */
 .hero {
   position: relative;
@@ -497,6 +553,7 @@ h3 {
   align-items: center;
   gap: 12px;
   flex: 1;
+  min-width: 0;
 }
 .chat-header .who h2 {
   font-size: 1.1rem;
@@ -512,6 +569,31 @@ h3 {
   height: 46px;
   font-size: 1.15rem;
   margin: 0;
+}
+.chat-header .who-text {
+  min-width: 0;
+}
+
+/* Telas estreitas: título/legenda cabem numa linha (com reticências) e as
+   ações (Cenas, Auto-narração, favorito, nova conversa) passam para uma
+   segunda linha que pode quebrar, em vez de vazar da tela. */
+@media (max-width: 600px) {
+  .chat-header-inner {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    padding: 12px 0;
+  }
+  .chat-header .who-text h2,
+  .chat-header .who-text .role {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .chat-actions {
+    flex: 1 1 100%;
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
 }
 
 .chat-scroll {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AuthNav from "./AuthNav";
+import MobileNav from "./MobileNav";
 
 export function TopBar() {
   return (
@@ -10,11 +11,12 @@ export function TopBar() {
         </Link>
         <nav className="nav">
           <Link href="/#personagens">Personagens</Link>
-          <Link href="/biblioteca-espiritual">Biblioteca</Link>
+          <Link href="/biblioteca-catolica">Biblioteca</Link>
           <Link href="/#como-funciona">Como funciona</Link>
           <Link href="/sobre">Sobre</Link>
         </nav>
         <AuthNav />
+        <MobileNav />
       </div>
     </header>
   );

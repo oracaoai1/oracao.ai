@@ -1,5 +1,5 @@
 // data/biblioteca-artigos.js
-// Fonte de dados da Biblioteca Espiritual.
+// Fonte de dados da Biblioteca Católica.
 // Para migrar para Supabase: editar apenas lib/biblioteca.js.
 
 export const artigos = [

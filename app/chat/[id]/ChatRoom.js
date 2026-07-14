@@ -205,7 +205,7 @@ export default function ChatRoom({ character }) {
           </Link>
           <div className="who">
             <Avatar character={character} />
-            <div>
+            <div className="who-text">
               <h2>{character.name}</h2>
               <div className="role">
                 {[character.title, character.era].filter(Boolean).join(" · ")}

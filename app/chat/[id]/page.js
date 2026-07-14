@@ -6,8 +6,9 @@ export function generateStaticParams() {
   return characters.map((c) => ({ id: c.id }));
 }
 
-export function generateMetadata({ params }) {
-  const character = getCharacter(params.id);
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const character = getCharacter(id);
   if (!character) return { title: "Personagem não encontrado" };
   return {
     title: `Conversar com ${character.name}`,
@@ -15,8 +16,9 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function ChatPage({ params }) {
-  const character = getCharacter(params.id);
+export default async function ChatPage({ params }) {
+  const { id } = await params;
+  const character = getCharacter(id);
   if (!character) notFound();
   return <ChatRoom character={character} />;
 }
