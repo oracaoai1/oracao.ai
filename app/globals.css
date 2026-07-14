@@ -541,9 +541,57 @@ h3 {
   display: flex;
   flex-direction: column;
 }
+.chat-bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1; /* atrás de todo o conteúdo em fluxo normal, sem precisar
+                  tornar header/scroll/composer "position" */
+}
 .chat-header {
   border-bottom: 1px solid var(--line);
   background: var(--white);
+}
+/* Vidro fosco: só quando o personagem tem vídeo de fundo (has-bg-video). */
+.chat-page.has-bg-video .chat-header,
+.chat-page.has-bg-video .composer {
+  background: rgba(15, 28, 51, 0.4);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.chat-page.has-bg-video .chat-header .role,
+.chat-page.has-bg-video .chat-header h2,
+.chat-page.has-bg-video .back,
+.chat-page.has-bg-video .autoplay-toggle {
+  color: rgba(247, 241, 227, 0.92);
+}
+.chat-page.has-bg-video .autoplay-toggle,
+.chat-page.has-bg-video .new-chat {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.chat-page.has-bg-video .msg.assistant .bubble {
+  background: rgba(255, 253, 248, 0.22);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  color: #fffdf8;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: none;
+}
+.chat-page.has-bg-video .msg.user .bubble {
+  background: rgba(27, 42, 74, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.chat-page.has-bg-video .composer textarea {
+  background: rgba(255, 253, 248, 0.85);
+}
+.chat-page.has-bg-video .chat-note {
+  color: rgba(247, 241, 227, 0.75);
 }
 .chat-header-inner {
   display: flex;

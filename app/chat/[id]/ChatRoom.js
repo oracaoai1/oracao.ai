@@ -33,6 +33,7 @@ export default function ChatRoom({ character }) {
   const [isFav, setIsFav] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
   const [scenesOpen, setScenesOpen] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
   const autoPlayRef = useRef(false);
   const conversationIdRef = useRef(null);
 
@@ -82,6 +83,14 @@ export default function ChatRoom({ character }) {
       const v = localStorage.getItem("oracao-autoplay") === "1";
       setAutoPlay(v);
       autoPlayRef.current = v;
+    } catch {}
+  }, []);
+
+  // Respeita "reduzir movimento" do sistema: não reproduz o vídeo de fundo
+  // em autoplay para quem ativou essa preferência de acessibilidade.
+  useEffect(() => {
+    try {
+      setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     } catch {}
   }, []);
 
@@ -191,7 +200,18 @@ export default function ChatRoom({ character }) {
     !historyLoading && messages.length === 0 && !loading;
 
   return (
-    <div className="chat-page">
+    <div className={`chat-page ${character.loopVideo ? "has-bg-video" : ""}`}>
+      {character.loopVideo && (
+        <video
+          className="chat-bg-video"
+          src={character.loopVideo}
+          autoPlay={!reduceMotion}
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+        />
+      )}
       <ScenesPanel
         characterId={character.id}
         characterName={character.name}

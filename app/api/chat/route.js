@@ -15,7 +15,10 @@ export const runtime = "nodejs";
 // (e na Vercel) para mudar sem alterar código. Padrão: Haiku (rápido e mais
 // barato). Para máxima qualidade, use "claude-opus-4-8".
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001";
-const MAX_TOKENS = 1024;
+// Teto de segurança para respostas curtas — a instrução do prompt (ver
+// BASE_GUIDANCE em lib/characters.js) é o controle primário; isto é o
+// backstop caso o modelo ignore a instrução.
+const MAX_TOKENS = 450;
 
 export async function POST(req) {
   // Rota protegida: exige sessão. Evita consumo anônimo da API.
