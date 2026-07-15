@@ -7,6 +7,7 @@ function IconPlay()     { return <svg viewBox="0 0 24 24" fill="currentColor" wi
 function IconPause()    { return <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>; }
 function IconVolume()   { return <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>; }
 function IconDownload() { return <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>; }
+function IconLoop()     { return <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>; }
 
 function WaveAnimation({ isPlaying }) {
   return (
@@ -29,13 +30,22 @@ function fmt(s) {
   return `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
 }
 
-export default function AudioPlayer({ text, label = 'Ouvir esta oração', autoGenerate = false }) {
+export default function AudioPlayer({
+  text,
+  label = 'Ouvir esta oração',
+  autoGenerate = false,
+  loopReference = null,
+  loopPrice = 1,
+}) {
   const { status, error, audioUrl, isCached, generate, reset } = useAudioGeneration();
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress]   = useState(0);
   const [current, setCurrent]     = useState(0);
   const [duration, setDuration]   = useState(0);
+  const [loopActive, setLoopActive] = useState(false);
+  const [loopBusy, setLoopBusy]     = useState(false);
+  const [loopErr, setLoopErr]       = useState('');
 
   useEffect(() => { if (autoGenerate && text) generate(text); }, [autoGenerate, text, generate]);
 
@@ -49,6 +59,35 @@ export default function AudioPlayer({ text, label = 'Ouvir esta oração', autoG
     a.addEventListener('ended', onEnded);
     return () => { a.removeEventListener('loadedmetadata',onLoad); a.removeEventListener('timeupdate',onTime); a.removeEventListener('ended',onEnded); };
   }, [audioUrl]);
+
+  // Novo áudio (ou reset): a repetição em loop paga não é transferida.
+  useEffect(() => { setLoopActive(false); setLoopErr(''); }, [audioUrl]);
+
+  async function toggleLoop() {
+    if (loopActive) {
+      setLoopActive(false);
+      return;
+    }
+    if (loopBusy) return;
+    setLoopErr('');
+    setLoopBusy(true);
+    try {
+      const r = await fetch('/api/oracao/repetir', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug: loopReference }),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'Não foi possível ativar a repetição.');
+      setLoopActive(true);
+      const a = audioRef.current;
+      if (a && a.paused) { try { await a.play(); setIsPlaying(true); } catch {} }
+    } catch (e) {
+      setLoopErr(e.message);
+    } finally {
+      setLoopBusy(false);
+    }
+  }
 
   const toggle = async () => {
     const a = audioRef.current; if (!a) return;
@@ -89,7 +128,7 @@ export default function AudioPlayer({ text, label = 'Ouvir esta oração', autoG
 
   return (
     <div style={S.card}>
-      {audioUrl && <audio ref={audioRef} src={audioUrl} preload="auto"/>}
+      {audioUrl && <audio ref={audioRef} src={audioUrl} loop={loopActive} preload="auto"/>}
       <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
         <WaveAnimation isPlaying={isPlaying}/>
         <button onClick={toggle} style={S.playBtn} aria-label={isPlaying?'Pausar':'Reproduzir'}>
@@ -108,6 +147,30 @@ export default function AudioPlayer({ text, label = 'Ouvir esta oração', autoG
         <div style={{...S.fill,width:`${progress}%`}}/>
         <div style={{...S.thumb,left:`calc(${progress}% - 6px)`}}/>
       </div>
+      {loopReference && (
+        <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
+          <button
+            onClick={toggleLoop}
+            disabled={loopBusy}
+            style={loopActive ? S.loopBtnActive : S.loopBtn}
+          >
+            <IconLoop/>
+            {loopActive
+              ? 'Repetindo em loop — parar'
+              : loopBusy
+                ? 'Ativando…'
+                : `Repetir em loop · ${loopPrice} 🕯️`}
+          </button>
+        </div>
+      )}
+      {loopErr && (
+        <p style={{color:'#e07070',margin:0,fontSize:'0.8rem'}}>
+          ⚠ {loopErr}{' '}
+          {loopErr.includes('Vela') && (
+            <a href="/assinar" style={{color:'var(--gold-bright)'}}>Obter Velas</a>
+          )}
+        </p>
+      )}
       <button onClick={reset} style={S.resetBtn}>Gerar nova narração</button>
     </div>
   );
@@ -117,6 +180,8 @@ const S = {
   card:{background:'rgba(15,28,51,0.92)',border:'1px solid rgba(216,169,58,0.25)',borderRadius:'14px',padding:'14px 18px',display:'flex',flexDirection:'column',gap:'10px',backdropFilter:'blur(8px)',maxWidth:'460px'},
   playBtn:{width:'40px',height:'40px',borderRadius:'50%',flexShrink:0,background:'var(--gold-bright)',border:'none',color:'#2b2010',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer'},
   iconBtn:{background:'transparent',border:'none',color:'rgba(216,169,58,0.6)',cursor:'pointer',padding:'4px',display:'flex',alignItems:'center',borderRadius:'6px'},
+  loopBtn:{display:'flex',alignItems:'center',gap:'6px',background:'transparent',border:'1px solid rgba(216,169,58,0.4)',color:'var(--gold-bright)',borderRadius:'999px',padding:'6px 14px',fontSize:'0.82rem',cursor:'pointer',alignSelf:'flex-start'},
+  loopBtnActive:{display:'flex',alignItems:'center',gap:'6px',background:'var(--gold-bright)',border:'1px solid var(--gold-bright)',color:'#2b2010',borderRadius:'999px',padding:'6px 14px',fontSize:'0.82rem',cursor:'pointer',alignSelf:'flex-start',fontWeight:600},
   track:{position:'relative',height:'4px',background:'rgba(216,169,58,0.15)',borderRadius:'4px',cursor:'pointer'},
   fill:{position:'absolute',inset:0,background:'linear-gradient(90deg,#b8860b,#d8a93a)',borderRadius:'4px',transition:'width .1s linear'},
   thumb:{position:'absolute',top:'-4px',width:'12px',height:'12px',borderRadius:'50%',background:'#d8a93a',boxShadow:'0 0 6px rgba(216,169,58,0.6)',transition:'left .1s linear'},

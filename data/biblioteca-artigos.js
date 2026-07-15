@@ -32,6 +32,19 @@ Esta oração pode ser recitada ao final do Terço e da Liturgia das Horas. Ao p
 **Reflexão**
 
 "Vale de lágrimas" não é uma expressão pessimista, mas realista. Reconhecer as dificuldades da vida é o primeiro passo para abraçar a misericórdia que Maria oferece como mediadora. Ela não substitui a Deus — aponta para Ele.`,
+    oracao: `Salve, Rainha, Mãe de misericórdia,
+vida, doçura e esperança nossa, salve!
+A vós bradamos, os degredados filhos de Eva;
+a vós suspiramos, gemendo e chorando
+neste vale de lágrimas.
+
+Eia, pois, advogada nossa,
+esses vossos olhos misericordiosos a nós volvei;
+e depois deste desterro, mostrai-nos Jesus,
+o bendito fruto do vosso ventre.
+
+Ó clemente, ó piedosa,
+ó doce Virgem Maria!`,
     publicado_em: '2025-01-10',
   },
   {
@@ -73,6 +86,19 @@ Não pedimos ausência de tentação — pedimos força para não cair. A vida e
 **Amém**
 
 Palavra hebraica que significa "assim seja" — uma ratificação de tudo o que foi dito, um sim a Deus.`,
+    oracao: `Pai nosso, que estais no céu,
+santificado seja o vosso nome,
+venha a nós o vosso Reino,
+seja feita a vossa vontade,
+assim na terra como no céu.
+
+O pão nosso de cada dia nos dai hoje,
+perdoai as nossas ofensas,
+assim como nós perdoamos a quem nos tem ofendido,
+e não nos deixeis cair em tentação,
+mas livrai-nos do mal.
+
+Amém.`,
     publicado_em: '2025-01-18',
   },
   {
@@ -108,6 +134,23 @@ A segunda parte da oração contém um dos paradoxos mais profundos do Evangelho
 **Como usar esta oração no dia a dia**
 
 Reze-a antes de encontros difíceis, conversas tensas, ou situações onde o amor parece impossível. Não como fórmula mágica, mas como orientação do coração: "Que eu seja instrumento — não protagonista."`,
+    oracao: `Senhor, fazei-me instrumento de vossa paz.
+Onde houver ódio, que eu leve o amor;
+onde houver ofensa, que eu leve o perdão;
+onde houver discórdia, que eu leve a união;
+onde houver dúvida, que eu leve a fé;
+onde houver erro, que eu leve a verdade;
+onde houver desespero, que eu leve a esperança;
+onde houver tristeza, que eu leve a alegria;
+onde houver trevas, que eu leve a luz.
+
+Ó Mestre, fazei que eu procure mais
+consolar do que ser consolado,
+compreender do que ser compreendido,
+amar do que ser amado,
+pois é dando que se recebe,
+é perdoando que se é perdoado,
+e é morrendo que se vive para a vida eterna.`,
     publicado_em: '2025-02-03',
   },
   {
@@ -151,6 +194,27 @@ Deus não nos protege removendo os inimigos da sala — Ele nos alimenta na pres
 **Como rezar este salmo**
 
 Ao chegar no "vale sombrio", pause. Respire. Deixe a verdade da promessa pousar antes de continuar.`,
+    oracao: `O Senhor é meu pastor, nada me faltará.
+Em verdes pastagens ele me faz repousar.
+Conduz-me junto às águas tranquilas
+e restaura as minhas forças.
+
+Pelos caminhos retos ele me guia,
+por amor ao seu nome.
+Ainda que eu atravesse o vale sombrio,
+não temerei perigo algum,
+pois tu estás comigo;
+o teu cajado e o teu báculo me dão segurança.
+
+Preparas para mim uma mesa
+diante dos meus adversários;
+unge com óleo a minha cabeça,
+meu cálice transborda.
+
+Felicidade e graça me acompanharão
+todos os dias da minha vida,
+e habitarei na casa do Senhor
+por longos dias.`,
     publicado_em: '2025-02-20',
   },
   {
@@ -186,6 +250,15 @@ Amém.
 **"Agora e na hora da nossa morte"**
 
 Esta frase final ancora a oração nos dois momentos mais importantes da existência humana: o presente e o fim. Rezar a Ave Maria é aprender a viver o agora com a consciência serena do depois.`,
+    oracao: `Ave Maria, cheia de graça,
+o Senhor é convosco;
+bendita sois vós entre as mulheres
+e bendito é o fruto do vosso ventre, Jesus.
+
+Santa Maria, Mãe de Deus,
+rogai por nós, pecadores,
+agora e na hora da nossa morte.
+Amém.`,
     publicado_em: '2025-03-05',
   },
   {
@@ -224,6 +297,22 @@ O coração do Ângelus é teológico: Deus entrou na história de forma irrever
 **Como incorporar ao dia moderno**
 
 Configure um alarme às 12h com o título "Ângelus". Quando tocar, pause — mesmo que por 30 segundos — e relembre: O Verbo se fez carne.`,
+    oracao: `O anjo do Senhor anunciou a Maria,
+e ela concebeu do Espírito Santo.
+Ave Maria, cheia de graça...
+
+Eis aqui a escrava do Senhor,
+faça-se em mim segundo a tua palavra.
+Ave Maria, cheia de graça...
+
+E o Verbo se fez carne
+e habitou entre nós.
+Ave Maria, cheia de graça...
+
+Rogai por nós, santa Mãe de Deus,
+para que sejamos dignos das promessas de Cristo.
+
+Derramai, Senhor, a vossa graça em nossas almas, para que nós, que pela anunciação do anjo conhecemos a Encarnação de Cristo, vosso Filho, pela sua paixão e cruz sejamos conduzidos à glória da ressurreição. Por Cristo nosso Senhor. Amém.`,
     publicado_em: '2025-03-22',
   },
 ];

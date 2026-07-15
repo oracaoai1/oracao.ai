@@ -75,7 +75,9 @@ export default async function ArtigoPage({ params }) {
   const artigo = await getArtigoPorSlug(slug);
   if (!artigo) notFound();
 
-  const textoAudio = artigo.conteudo
+  // Narra só o texto da oração (sem a introdução histórica nem as seções de
+  // reflexão/comentário); artigos sem `oracao` caem no conteúdo completo.
+  const textoAudio = (artigo.oracao || artigo.conteudo)
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/\n{2,}/g, '\n')
     .trim();
@@ -130,7 +132,11 @@ export default async function ArtigoPage({ params }) {
             <div className="artigo-divisor-linha" />
           </div>
           <div className="artigo-audio">
-            <AudioPlayerWrapper text={textoAudio} label="Ouvir esta oração" />
+            <AudioPlayerWrapper
+              text={textoAudio}
+              label="Ouvir esta oração"
+              loopReference={artigo.slug}
+            />
           </div>
         </header>
 
