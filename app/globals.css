@@ -675,12 +675,18 @@ h3 {
   display: flex;
   flex-direction: column;
 }
+.chat-page.has-bg-video {
+  background: var(--navy-deep);
+}
 .chat-bg-video {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Afasta o personagem (reduz o zoom do vídeo gerado); o fundo navy
+     de .chat-page preenche a margem que sobra ao redor. */
+  transform: scale(0.8);
   z-index: -1; /* atrás de todo o conteúdo em fluxo normal, sem precisar
                   tornar header/scroll/composer "position" */
 }
