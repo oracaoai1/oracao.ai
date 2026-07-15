@@ -15,6 +15,9 @@ export default async function sitemap() {
     { url: `${BASE_URL}/assinar`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE_URL}/entrar`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/cadastro`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/mapa-do-site`, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${BASE_URL}/termos-de-uso`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${BASE_URL}/politica-de-privacidade`, changeFrequency: "yearly", priority: 0.2 },
   ];
 
   const personagens = characters.map((c) => ({

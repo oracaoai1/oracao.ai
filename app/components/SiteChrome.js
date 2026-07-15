@@ -40,6 +40,11 @@ export function Footer() {
           Não substituem o magistério da Igreja, a leitura das Escrituras nem o
           acompanhamento de um sacerdote ou diretor espiritual.
         </p>
+        <nav className="footer-links">
+          <Link href="/mapa-do-site">Mapa do site</Link>
+          <Link href="/termos-de-uso">Termos de Uso</Link>
+          <Link href="/politica-de-privacidade">Política de Privacidade</Link>
+        </nav>
       </div>
     </footer>
   );

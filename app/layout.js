@@ -1,4 +1,5 @@
 ﻿import "./globals.css";
+import CookieBanner from "./components/CookieBanner";
 
 export const metadata = {
   metadataBase: new URL("https://www.oracao.ai"),
@@ -36,7 +37,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        {children}
+        <CookieBanner />
+      </body>
     </html>
   );
 }

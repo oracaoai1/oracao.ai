@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import PasswordField from "@/app/components/PasswordField";
 
@@ -9,9 +10,15 @@ export default function ContaClient() {
   const supabaseRef = useRef(null);
   if (!supabaseRef.current) supabaseRef.current = createClient();
   const supabase = supabaseRef.current;
+  const router = useRouter();
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [confirmText, setConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [deleteErr, setDeleteErr] = useState("");
+  const [showDelete, setShowDelete] = useState(false);
 
   const [name, setName] = useState("");
   const [nameMsg, setNameMsg] = useState("");
@@ -71,6 +78,23 @@ export default function ContaClient() {
     setPw("");
     setPw2("");
     setPwMsg("Senha alterada com sucesso.");
+  }
+
+  async function excluirConta() {
+    if (confirmText.trim().toUpperCase() !== "EXCLUIR") return;
+    setDeleteErr("");
+    setDeleting(true);
+    try {
+      const res = await fetch("/api/conta/excluir", { method: "DELETE" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Não foi possível excluir a conta.");
+      await supabase.auth.signOut();
+      router.push("/");
+      router.refresh();
+    } catch (err) {
+      setDeleteErr(err.message);
+      setDeleting(false);
+    }
   }
 
   if (loading) return <p className="intention-muted">Carregando…</p>;
@@ -135,6 +159,64 @@ export default function ContaClient() {
           {pwSaving ? "Salvando…" : "Alterar senha"}
         </button>
       </form>
+
+      <div className="conta-danger">
+        <h2 className="conta-h2">Excluir conta</h2>
+        <p className="conta-danger-text">
+          Remove permanentemente sua conta, conversas, favoritos, intenções de
+          oração e assinatura (se houver). Esta ação não pode ser desfeita.
+        </p>
+
+        {!showDelete && (
+          <button
+            type="button"
+            className="btn btn-danger-outline"
+            onClick={() => setShowDelete(true)}
+          >
+            Excluir minha conta
+          </button>
+        )}
+
+        {showDelete && (
+          <div>
+            {deleteErr && <div className="auth-msg error">{deleteErr}</div>}
+            <div className="field">
+              <label htmlFor="confirm-delete">
+                Digite <strong>EXCLUIR</strong> para confirmar
+              </label>
+              <input
+                id="confirm-delete"
+                type="text"
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder="EXCLUIR"
+              />
+            </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button
+                type="button"
+                className="btn btn-danger"
+                disabled={deleting || confirmText.trim().toUpperCase() !== "EXCLUIR"}
+                onClick={excluirConta}
+              >
+                {deleting ? "Excluindo…" : "Confirmar exclusão"}
+              </button>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                disabled={deleting}
+                onClick={() => {
+                  setShowDelete(false);
+                  setConfirmText("");
+                  setDeleteErr("");
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

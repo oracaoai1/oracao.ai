@@ -16,6 +16,7 @@ export default function AuthForm({ mode }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -25,6 +26,12 @@ export default function AuthForm({ mode }) {
     if (loading) return;
     setError("");
     setNotice("");
+
+    if (isSignup && !acceptedTerms) {
+      setError("É preciso aceitar os Termos de Uso e a Política de Privacidade.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -111,6 +118,20 @@ export default function AuthForm({ mode }) {
         <div className="auth-forgot">
           <Link href="/recuperar-senha">Esqueci minha senha</Link>
         </div>
+      )}
+
+      {isSignup && (
+        <label className="auth-terms">
+          <input
+            type="checkbox"
+            checked={acceptedTerms}
+            onChange={(e) => setAcceptedTerms(e.target.checked)}
+          />
+          <span>
+            Li e aceito os <Link href="/termos-de-uso">Termos de Uso</Link> e a{" "}
+            <Link href="/politica-de-privacidade">Política de Privacidade</Link>.
+          </span>
+        </label>
       )}
 
       <button className="btn btn-gold" type="submit" disabled={loading}>
