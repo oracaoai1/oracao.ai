@@ -688,7 +688,7 @@ h3 {
   object-fit: cover;
   /* Afasta o personagem (reduz o zoom do vídeo gerado); o fundo navy
      de .chat-page preenche a margem que sobra ao redor. */
-  transform: scale(0.94);
+  transform: scale(0.9);
   z-index: -1; /* atrás de todo o conteúdo em fluxo normal, sem precisar
                   tornar header/scroll/composer "position" */
 }
