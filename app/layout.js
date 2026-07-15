@@ -26,6 +26,11 @@ export const metadata = {
     locale: "pt_BR",
     type: "website",
   },
+  verification: {
+      other: {
+            "msvalidate.01": "7A7D5CF8861E224E2B2D3CA2CE38C1AF",
+      },
+  },
 };
 
 export default function RootLayout({ children }) {
