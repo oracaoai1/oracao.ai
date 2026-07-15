@@ -695,7 +695,7 @@ h3 {
   object-fit: cover;
   /* Afasta o personagem (reduz o zoom do vídeo gerado); o ::before acima
      preenche a margem que sobra ao redor. */
-  transform: scale(0.9);
+  transform: scale(0.65);
   z-index: -1; /* atrás de todo o conteúdo em fluxo normal, sem precisar
                   tornar header/scroll/composer "position" */
 }
