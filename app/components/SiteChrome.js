@@ -10,6 +10,7 @@ export function TopBar() {
           <img src="/logo-oracao.png" alt="Oração.AI" />
         </Link>
         <nav className="nav">
+          <Link href="/oracao-do-dia">Reza Diária</Link>
           <Link href="/#personagens">Personagens</Link>
           <Link href="/biblioteca-catolica">Biblioteca</Link>
           <Link href="/#como-funciona">Como funciona</Link>

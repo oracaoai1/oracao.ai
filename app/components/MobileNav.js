@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 const LINKS = [
+  { href: "/oracao-do-dia", label: "Reza Diária" },
   { href: "/#personagens", label: "Personagens" },
   { href: "/biblioteca-catolica", label: "Biblioteca" },
   { href: "/#como-funciona", label: "Como funciona" },
