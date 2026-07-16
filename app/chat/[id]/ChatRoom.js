@@ -263,15 +263,6 @@ export default function ChatRoom({ character }) {
       <div className="chat-scroll" ref={scrollRef}>
         <div className="container">
           <div className="chat-stack">
-            {/* Saudação fixa (não faz parte do diálogo persistido). */}
-            <div className="msg assistant">
-              <Avatar character={character} className="mini-avatar" />
-              <div className="bubble-col">
-                <div className="bubble">{greeting}</div>
-                <MessageAudioButton text={greeting} characterId={character.id} />
-              </div>
-            </div>
-
             {messages.map((m, i) =>
               m.role === "assistant" ? (
                 <div key={i} className="msg assistant">
@@ -325,12 +316,12 @@ export default function ChatRoom({ character }) {
             </div>
           )}
           {showSuggestions && (
-            <div className="suggestions suggestions--composer">
-              {character.questions.map((q) => (
-                <button key={q} className="chip" onClick={() => send(q)}>
-                  {q}
-                </button>
-              ))}
+            <div className="msg assistant greeting--composer">
+              <Avatar character={character} className="mini-avatar" />
+              <div className="bubble-col">
+                <div className="bubble">{greeting}</div>
+                <MessageAudioButton text={greeting} characterId={character.id} />
+              </div>
             </div>
           )}
           <div className="composer-toolbar">
