@@ -196,7 +196,7 @@ h3 {
     linear-gradient(160deg, rgba(15, 28, 51, 0.82), rgba(27, 42, 74, 0.88)),
     url("/vitral-home.svg") center / cover no-repeat;
   color: var(--parchment);
-  padding: 96px 0 110px;
+  padding: 48px 0 56px;
 }
 .hero::after {
   content: "";
@@ -1498,11 +1498,8 @@ h3 {
 }
 
 @media (max-width: 720px) {
-  .nav {
-    display: none;
-  }
   .hero {
-    padding: 70px 0 80px;
+    padding: 36px 0 40px;
   }
   .section {
     padding: 56px 0;

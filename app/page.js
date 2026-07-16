@@ -30,11 +30,6 @@ export default function HomePage() {
         <div className="container">
           <p className="eyebrow">Inteligência artificial a serviço da fé</p>
           <h1>Converse com as grandes figuras da Igreja</h1>
-          <p>
-            Santos, papas, doutores e devoções da Igreja Católica recriados por
-            inteligência artificial. Faça suas perguntas, aprofunde sua fé e
-            aprenda com quem trilhou o caminho da santidade.
-          </p>
           <div className="hero-actions">
             <Link href="#personagens" className="btn btn-gold">
               Escolher um personagem
