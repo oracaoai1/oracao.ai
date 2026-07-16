@@ -245,6 +245,7 @@ export default function ChatRoom({ character }) {
         </div>
       </header>
 
+      {character.loopVideo && <div className="chat-video-space" aria-hidden="true" />}
       <div className="chat-scroll">
         <div className="container">
           <div className="chat-stack">

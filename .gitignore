@@ -33,3 +33,5 @@ Thumbs.db
 
 # brainstorming visual companion (mockups, not app content)
 .superpowers/
+
+.vercel
