@@ -46,25 +46,21 @@ export default function MessageImageButton({ characterId, text, conversationId }
   }
 
   return (
-    <div style={{ marginTop: 4 }}>
+    <span style={{ display: "inline-flex", flexDirection: "column", gap: 4 }}>
       <button
         type="button"
+        className="msg-illustrate-btn"
         onClick={gerar}
         disabled={state === "loading"}
-        style={{
-          fontSize: 13, padding: "4px 10px", borderRadius: 999,
-          border: "1px solid rgba(13,27,62,.25)", background: "transparent",
-          cursor: "pointer",
-        }}
-        title="Gerar uma imagem devocional desta resposta (1 Vela)"
+        title="Gerar uma imagem devocional desta resposta — recurso premium (1 Vela)"
       >
-        {state === "loading" ? "🕯️ Ilustrando…" : "🖼️ Ilustrar · 1 🕯️"}
+        {state === "loading" ? "🕯️ Ilustrando…" : "✨ Ilustrar · 1 🕯️"}
       </button>
       {state === "error" && (
-        <small style={{ display: "block", color: "#b3261e" }}>
+        <small style={{ color: "#b3261e" }}>
           {erro} {erro.includes("Vela") && <Link href="/assinar">Obter Velas</Link>}
         </small>
       )}
-    </div>
+    </span>
   );
 }

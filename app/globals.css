@@ -895,6 +895,16 @@ h3 {
   gap: 5px;
   min-width: 0;
 }
+.msg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.msg-actions figure {
+  flex: 1 1 100%;
+  order: -1;
+}
 .msg-audio {
   display: inline-flex;
 }
@@ -928,6 +938,32 @@ h3 {
 }
 .msg-audio-label {
   line-height: 1;
+}
+/* Botão "Ilustrar" — feature premium (custa Vela), precisa se destacar
+   visualmente ao lado do "Ouvir" (neutro). */
+.msg-illustrate-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: #2b2010;
+  border: none;
+  border-radius: 999px;
+  padding: 4px 13px 4px 11px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(184, 134, 11, 0.4);
+  transition: transform 0.12s, opacity 0.15s;
+}
+.msg-illustrate-btn:hover:not(:disabled) {
+  transform: translateY(-1px) scale(1.02);
+}
+.msg-illustrate-btn:disabled {
+  opacity: 0.75;
+  cursor: default;
+  transform: none;
 }
 .msg-audio-spin {
   width: 13px;

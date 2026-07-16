@@ -255,18 +255,20 @@ export default function ChatRoom({ character }) {
                   <Avatar character={character} className="mini-avatar" />
                   <div className="bubble-col">
                     <div className="bubble">{m.content}</div>
-                    <MessageAudioButton
-                      text={m.content}
-                      characterId={character.id}
-                      autoStart={m.auto}
-                    />
-                    {user && (
-                      <MessageImageButton
-                        characterId={character.id}
+                    <div className="msg-actions">
+                      {user && (
+                        <MessageImageButton
+                          characterId={character.id}
+                          text={m.content}
+                          conversationId={conversationIdRef.current}
+                        />
+                      )}
+                      <MessageAudioButton
                         text={m.content}
-                        conversationId={conversationIdRef.current}
+                        characterId={character.id}
+                        autoStart={m.auto}
                       />
-                    )}
+                    </div>
                   </div>
                 </div>
               ) : (
