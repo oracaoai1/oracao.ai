@@ -72,7 +72,7 @@ h3 {
 .topbar-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   height: 70px;
 }
 .brand {
@@ -129,9 +129,9 @@ h3 {
   color: var(--navy-deep);
 }
 
-/* ---------- Menu hamburguer (mobile) ---------- */
+/* ---------- Menu dropdown único da barra superior ---------- */
 .mobile-nav-toggle {
-  display: none;
+  display: inline-flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -186,11 +186,6 @@ h3 {
 }
 .mobile-nav-panel > *:last-child {
   border-bottom: none;
-}
-@media (max-width: 720px) {
-  .mobile-nav-toggle {
-    display: inline-flex;
-  }
 }
 
 /* ---------- Hero ---------- */
@@ -1710,40 +1705,21 @@ h3 {
 }
 
 /* Estado de autenticação na barra superior. */
-.auth-nav {
-  display: flex;
+.velas-balance {
+  margin-left: auto;
+  display: inline-flex;
   align-items: center;
-  gap: 18px;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-.auth-nav .who {
-  color: var(--ink-soft);
-}
-.auth-nav .link-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font: inherit;
-  color: var(--ink-soft);
-  padding: 0;
-}
-.auth-nav .link-btn:hover {
-  color: var(--navy-deep);
-}
-.auth-nav .pill {
-  padding: 8px 18px;
+  gap: 6px;
+  padding: 7px 16px;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--gold-bright), var(--gold));
   color: #2b2010;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(184, 134, 11, 0.35);
+  transition: transform 0.12s;
 }
-
-/* Nomes longos quebram em duas linhas e disputam espaço com o menu
-   hamburguer nessa largura — em telas estreitas essas ações (Intenções,
-   conta, sair / entrar, criar conta) vivem só no menu (ver MobileNav). */
-@media (max-width: 720px) {
-  .auth-nav {
-    display: none;
-  }
+.velas-balance:hover {
+  transform: translateY(-1px);
 }

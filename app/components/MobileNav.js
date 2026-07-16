@@ -1,9 +1,8 @@
 "use client";
 
-// Menu hamburguer para telas estreitas — abaixo de 720px tanto o `.nav`
-// quanto o `.auth-nav` do cabeçalho ficam ocultos (ver globals.css: nomes
-// longos quebravam linha e disputavam espaço com o botão), então este é o
-// único jeito de alcançar essas ações no celular.
+// Menu dropdown único da barra superior (todos os tamanhos de tela): reúne
+// navegação + conta/autenticação num só menu à esquerda do logo, deixando a
+// barra superior só com [menu] [logo] [saldo de Velas].
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

@@ -1,23 +1,16 @@
 import Link from "next/link";
-import AuthNav from "./AuthNav";
 import MobileNav from "./MobileNav";
+import VelasBalance from "./VelasBalance";
 
 export function TopBar() {
   return (
     <header className="topbar">
       <div className="container topbar-inner">
+        <MobileNav />
         <Link href="/" className="brand brand-logo" aria-label="Oração.AI — início">
           <img src="/logo-oracao.png" alt="Oração.AI" />
         </Link>
-        <nav className="nav">
-          <Link href="/oracao-do-dia">Reza Diária</Link>
-          <Link href="/#personagens">Personagens</Link>
-          <Link href="/biblioteca-catolica">Biblioteca</Link>
-          <Link href="/#como-funciona">Como funciona</Link>
-          <Link href="/sobre">Sobre</Link>
-        </nav>
-        <AuthNav />
-        <MobileNav />
+        <VelasBalance />
       </div>
     </header>
   );

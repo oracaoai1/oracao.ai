@@ -126,3 +126,53 @@ monogram combining a small cross growing out of the top of a stylized letter
 Symmetrical, bold, minimal detail. No text besides the monogram, no
 watermark.
 ```
+
+---
+
+## Correção do lockup horizontal (Canva, 2026-07-16)
+
+O usuário desenhou uma versão horizontal (símbolo + "Oração.ai" + slogan lado
+a lado) no Canva. Boa pra cabeçalho do site, mas com 3 problemas: dourado com
+contraste fraco sobre fundo branco, relevo/emboss 3D pesado no texto
+(embola em tamanho pequeno), e a letra "O" de "Oração" com um estilo
+caligráfico diferente do resto das letras (inconsistente). Os prompts abaixo
+pedem a mesma composição corrigida, em duas versões (clara e escura).
+
+### Prompt A — Lockup horizontal, versão para fundo claro
+
+```
+A horizontal logo lockup: on the left, a circular medallion emblem (a Latin
+cross with angel wings wrapping around it, flat vector style, thick clean
+outlines). To the right, the wordmark "Oração.ai" in a blackletter/gothic
+typeface — EVERY letter, including the capital "O", must share the exact
+same blackletter style and weight (no calligraphic or script swash on the
+"O", no mixing of type styles). Below the wordmark, a smaller tagline
+"Plataforma de Fé e Espiritualidade" in a clean modern sans-serif.
+
+Color: a deep, saturated antique gold (#8a6508, darker and more saturated
+than pale gold) with a thin dark brown/near-black outline around every
+letter and shape, for strong contrast against a solid white background. Flat
+vector illustration — NO 3D bevel, NO emboss, NO glossy metallic shading, NO
+drop shadow. Clean, crisp edges, legible even at small sizes. White
+background. No watermark.
+```
+
+### Prompt B — Mesmo lockup, versão para fundo escuro
+
+```
+The same horizontal logo lockup as before: circular medallion (Latin cross
+with angel wings, flat vector, thick clean outlines) on the left, the
+wordmark "Oração.ai" in a single consistent blackletter style (the capital
+"O" matches the same blackletter weight as the rest of the letters — no
+script or calligraphic swash), with the tagline "Plataforma de Fé e
+Espiritualidade" in clean modern sans-serif below it.
+
+Color: warm gold gradient (#d8a93a to #b8860b), flat vector illustration —
+NO 3D bevel, NO heavy emboss, NO glossy metallic shading. Clean crisp edges,
+legible at small sizes. Solid deep navy background (#0f1c33). No watermark.
+```
+
+**Objetivo**: mesma composição do Canva, mas com tipografia consistente (um
+só estilo de letra), sem o relevo 3D que atrapalha em tamanho pequeno, e com
+contraste calibrado pra cada fundo (claro/escuro) em vez de um dourado só
+que funciona bem num fundo e mal no outro.
