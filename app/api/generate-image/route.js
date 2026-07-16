@@ -5,13 +5,18 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getCharacter } from "@/lib/characters";
-import { generateImage, buildDevotionalPrompt } from "@/lib/fal";
+import {
+  generateImage,
+  generateImageWithIdentity,
+  buildDevotionalPrompt,
+} from "@/lib/fal";
 import { PRECOS } from "@/lib/plans";
 import crypto from "node:crypto";
 
 export const runtime = "nodejs";
 
 const BUCKET = "media";
+const SITE_URL = "https://www.oracao.ai";
 
 export async function POST(request) {
   const supabase = await createClient();
@@ -65,8 +70,16 @@ export async function POST(request) {
   }
 
   try {
-    const prompt = buildDevotionalPrompt(character.name, sourceText);
-    const falUrl = await generateImage(prompt);
+    const prompt = buildDevotionalPrompt(
+      character.name,
+      sourceText,
+      character.raw?.image_prompt_personagem
+    );
+    // Com retrato publicado: preserva o rosto do personagem (PuLID Flux).
+    // Sem retrato (fallback): gera só a partir do texto, como antes.
+    const falUrl = character.image
+      ? await generateImageWithIdentity(prompt, `${SITE_URL}${character.image}`)
+      : await generateImage(prompt);
 
     // Persiste a imagem no nosso Storage (a URL do fal é temporária).
     const imgRes = await fetch(falUrl);
