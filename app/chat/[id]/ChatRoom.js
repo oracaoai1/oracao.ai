@@ -37,7 +37,6 @@ export default function ChatRoom({ character }) {
   const autoPlayRef = useRef(false);
   const conversationIdRef = useRef(null);
 
-  const scrollRef = useRef(null);
   const textareaRef = useRef(null);
   const supabaseRef = useRef(null);
   if (!supabaseRef.current) supabaseRef.current = createClient();
@@ -104,11 +103,6 @@ export default function ChatRoom({ character }) {
       return next;
     });
   }
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, loading]);
 
   function autoGrow() {
     const ta = textareaRef.current;
@@ -260,7 +254,7 @@ export default function ChatRoom({ character }) {
         </div>
       </header>
 
-      <div className="chat-scroll" ref={scrollRef}>
+      <div className="chat-scroll">
         <div className="container">
           <div className="chat-stack">
             {messages.map((m, i) =>
