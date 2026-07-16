@@ -85,28 +85,43 @@ export function getAvatarId(characterId) {
 
 ## 2. Integração HeyGen (SDK oficial)
 
-Pacote novo: `@heygen/streaming-avatar` (cliente) — envolve o WebRTC/LiveKit
-por baixo, suporte oficial do HeyGen.
+Pacote: `@heygen/liveavatar-web-sdk` (cliente) — SDK atual/suportado do
+HeyGen para o produto "LiveAvatar" (o pacote antigo, `@heygen/streaming-avatar`,
+está descontinuado e, na prática, quebrado — o build publicado nem inclui
+os arquivos que o `package.json` declara como entrada). Confirmado por
+inspeção dos tipos TypeScript do pacote novo + `docs.liveavatar.com`,
+não só pela descrição geral.
 
-**Fluxo** (confirmado contra a documentação atual do HeyGen):
+**Fluxo:**
 1. Backend (`/api/avatar-vivo/iniciar`) chama
-   `POST https://api.heygen.com/v1/streaming.create_token` com a
-   `HEYGEN_LIVEAVATAR_API_KEY` (nunca exposta ao navegador) — devolve um
-   access token de curta duração.
-2. Cliente instancia `new StreamingAvatar({ token })` com esse token e
-   chama `avatar.createStartAvatar({ avatarName: <id do personagem>, quality, voice: {...} })`
-   — devolve `session_id`, `url` (WebSocket/LiveKit) e um `MediaStream`
-   que o componente conecta a um `<video>`.
+   `POST https://api.liveavatar.com/v1/sessions/token`, header
+   `X-API-KEY: <HEYGEN_LIVEAVATAR_API_KEY>` (nunca exposta ao navegador),
+   body `{ mode: "LITE", avatar_id: <id do personagem>, max_session_duration: 900 }`
+   (900s = 15 min, o próprio HeyGen também aplica esse teto como rede de
+   segurança adicional à nossa). Resposta:
+   `{ data: { session_id, session_token } }`.
+2. Cliente instancia `new LiveAvatarSession(session_token, { voiceChat: true })`,
+   chama `.start()` para conectar, e `.attach(videoElement)` para exibir o
+   vídeo/áudio do avatar num `<video>` da página.
 3. Para cada resposta do personagem, o cliente chama
-   `avatar.speak({ text, task_type: "repeat" })` — `"repeat"` porque o
-   texto já vem pronto do nosso Claude, o avatar só fala e faz lip-sync,
-   sem gerar texto por conta própria.
+   `session.repeat(texto)` — método do modo LITE que faz o avatar falar
+   exatamente esse texto (lip-sync), sem gerar texto por conta própria
+   (diferente de `.message()`, que é para o modo FULL/agente autônomo,
+   fora de escopo aqui).
+4. `session.stop()` encerra a conexão.
 
 **Áudio/voz**: o próprio avatar HeyGen já tem uma voz configurada (definida
-quando o avatar interativo foi criado no painel do HeyGen). Não usa
-ElevenLabs nem `lib/voices.js` aqui — o parâmetro `voice` do
-`createStartAvatar` serve só para ajustes finos opcionais (ex.: `rate`),
-não para trocar de voz.
+quando o avatar foi criado no painel do HeyGen/LiveAvatar). Não usa
+ElevenLabs nem `lib/voices.js` aqui.
+
+**Entrada por voz do usuário**: `voiceChat: true` habilita a escuta do
+microfone pelo próprio SDK (`session.startListening()`/`stopListening()`),
+mas como decidimos manter nosso próprio Claude como cérebro, a transcrição
+de voz do usuário continua vindo do `MicButton`/Web Speech API já
+existente no projeto (texto transcrito vai para `/api/avatar-vivo/falar`
+igual à entrada por texto) — `voiceChat` fica ligado só para a
+infraestrutura de áudio do SDK funcionar corretamente, não para o HeyGen
+decidir sozinho o que o avatar responde.
 
 ## 3. Rotas de API
 
