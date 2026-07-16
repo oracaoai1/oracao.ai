@@ -235,14 +235,6 @@ export default function ChatRoom({ character }) {
           <div className="chat-actions">
             <button
               type="button"
-              className="autoplay-toggle"
-              onClick={() => setScenesOpen(true)}
-              title="Ver cenas em vídeo deste santo"
-            >
-              🎬 Cenas
-            </button>
-            <button
-              type="button"
               className={`autoplay-toggle ${autoPlay ? "is-on" : ""}`}
               onClick={toggleAutoPlay}
               aria-pressed={autoPlay}
@@ -319,16 +311,6 @@ export default function ChatRoom({ character }) {
               </div>
             )}
           </div>
-
-          {showSuggestions && (
-            <div className="suggestions">
-              {character.questions.map((q) => (
-                <button key={q} className="chip" onClick={() => send(q)}>
-                  {q}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
@@ -342,6 +324,25 @@ export default function ChatRoom({ character }) {
               conversa.
             </div>
           )}
+          {showSuggestions && (
+            <div className="suggestions suggestions--composer">
+              {character.questions.map((q) => (
+                <button key={q} className="chip" onClick={() => send(q)}>
+                  {q}
+                </button>
+              ))}
+            </div>
+          )}
+          <div className="composer-toolbar">
+            <button
+              type="button"
+              className="scenes-btn"
+              onClick={() => setScenesOpen(true)}
+              title="Ver cenas em vídeo deste santo"
+            >
+              🎬 Cenas
+            </button>
+          </div>
           <div className="composer-inner">
             <MicButton
               disabled={loading}

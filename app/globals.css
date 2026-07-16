@@ -712,11 +712,13 @@ h3 {
 .chat-page.has-bg-video .chat-header .role,
 .chat-page.has-bg-video .chat-header h2,
 .chat-page.has-bg-video .back,
-.chat-page.has-bg-video .autoplay-toggle {
+.chat-page.has-bg-video .autoplay-toggle,
+.chat-page.has-bg-video .scenes-btn {
   color: rgba(247, 241, 227, 0.92);
 }
 .chat-page.has-bg-video .autoplay-toggle,
-.chat-page.has-bg-video .new-chat {
+.chat-page.has-bg-video .new-chat,
+.chat-page.has-bg-video .scenes-btn {
   border-color: rgba(255, 255, 255, 0.25);
 }
 .chat-page.has-bg-video .msg.assistant .bubble {
@@ -936,20 +938,23 @@ h3 {
 /* Botão de microfone (entrada por voz) no compositor */
 .mic-btn {
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: transparent;
-  border: 1px solid var(--line);
-  color: var(--ink-soft);
+  font-size: 1.3rem;
+  background: rgba(184, 134, 11, 0.08);
+  border: 2px solid var(--gold);
+  color: var(--gold);
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.12s;
 }
 .mic-btn:hover:not(:disabled) {
-  color: var(--gold);
+  color: var(--navy-deep);
   border-color: var(--gold);
+  background: rgba(184, 134, 11, 0.18);
+  transform: scale(1.05);
 }
 .mic-btn.is-listening {
   color: #c0395f;
@@ -1116,6 +1121,33 @@ h3 {
   border-color: var(--gold);
   color: var(--navy-deep);
 }
+.suggestions--composer {
+  margin: 0 auto 14px;
+}
+
+.composer-toolbar {
+  max-width: 760px;
+  margin: 0 auto 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+.scenes-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.scenes-btn:hover {
+  border-color: var(--gold);
+  color: var(--navy-deep);
+}
 
 .composer {
   border-top: 1px solid var(--line);
@@ -1149,15 +1181,16 @@ h3 {
 .send {
   border: none;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, var(--gold-bright), var(--gold));
   color: #2b2010;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   cursor: pointer;
   flex-shrink: 0;
+  box-shadow: 0 6px 18px rgba(184, 134, 11, 0.4);
   transition: transform 0.12s, opacity 0.15s;
 }
 .send:hover {
