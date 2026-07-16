@@ -697,9 +697,18 @@ h3 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(0.9);
   z-index: -1; /* atrás de todo o conteúdo em fluxo normal, sem precisar
                   tornar header/scroll/composer "position" */
+}
+/* Os vídeos são verticais (9:16, feitos pro celular). Em telas mais largas
+   que altas (desktop/fullscreen), "cover" precisa ampliar demais pra cobrir
+   a largura, cortando quase toda a altura (efeito de zoom no rosto). Nessas
+   telas, mostra o vídeo inteiro (sem cortar) com o fundo navy do ::before
+   preenchendo as laterais, em vez de recortar. */
+@media (min-aspect-ratio: 1/1) {
+  .chat-bg-video {
+    object-fit: contain;
+  }
 }
 .chat-header {
   border-bottom: 1px solid var(--line);
