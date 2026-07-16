@@ -227,15 +227,6 @@ export default function ChatRoom({ character }) {
             </div>
           </div>
           <div className="chat-actions">
-            <button
-              type="button"
-              className={`autoplay-toggle ${autoPlay ? "is-on" : ""}`}
-              onClick={toggleAutoPlay}
-              aria-pressed={autoPlay}
-              title="Narrar automaticamente as respostas com a voz do personagem"
-            >
-              {autoPlay ? "🔊" : "🔇"} Auto-narração
-            </button>
             {user && (
               <>
                 <FavoriteHeart
@@ -319,6 +310,15 @@ export default function ChatRoom({ character }) {
             </div>
           )}
           <div className="composer-toolbar">
+            <button
+              type="button"
+              className={`autoplay-toggle ${autoPlay ? "is-on" : ""}`}
+              onClick={toggleAutoPlay}
+              aria-pressed={autoPlay}
+              title="Narrar automaticamente as respostas com a voz do personagem"
+            >
+              {autoPlay ? "🔊" : "🔇"} Auto-narração
+            </button>
             <button
               type="button"
               className="scenes-btn"

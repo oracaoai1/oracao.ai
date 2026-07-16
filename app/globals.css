@@ -1120,7 +1120,8 @@ h3 {
   max-width: 760px;
   margin: 0 auto 10px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 10px;
 }
 .scenes-btn {
   background: transparent;
