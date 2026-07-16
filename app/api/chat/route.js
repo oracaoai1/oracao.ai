@@ -18,7 +18,7 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001";
 // Teto de segurança para respostas curtas — a instrução do prompt (ver
 // BASE_GUIDANCE em lib/characters.js) é o controle primário; isto é o
 // backstop caso o modelo ignore a instrução.
-const MAX_TOKENS = 450;
+const MAX_TOKENS = 220;
 
 export async function POST(req) {
   // Rota protegida: exige sessão. Evita consumo anônimo da API.

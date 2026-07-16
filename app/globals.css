@@ -693,9 +693,7 @@ h3 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Afasta o personagem (reduz o zoom do vídeo gerado); o ::before acima
-     preenche a margem que sobra ao redor. */
-  transform: scale(0.65);
+  transform: scale(0.9);
   z-index: -1; /* atrás de todo o conteúdo em fluxo normal, sem precisar
                   tornar header/scroll/composer "position" */
 }
@@ -706,9 +704,9 @@ h3 {
 /* Vidro fosco: só quando o personagem tem vídeo de fundo (has-bg-video). */
 .chat-page.has-bg-video .chat-header,
 .chat-page.has-bg-video .composer {
-  background: rgba(15, 28, 51, 0.4);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  background: rgba(15, 28, 51, 0.2);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
   border-color: rgba(255, 255, 255, 0.14);
 }
 .chat-page.has-bg-video .chat-header .role,
@@ -722,22 +720,24 @@ h3 {
   border-color: rgba(255, 255, 255, 0.25);
 }
 .chat-page.has-bg-video .msg.assistant .bubble {
-  background: rgba(255, 253, 248, 0.22);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  background: rgba(255, 253, 248, 0.12);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
   color: #fffdf8;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.22);
   box-shadow: none;
 }
 .chat-page.has-bg-video .msg.user .bubble {
-  background: rgba(27, 42, 74, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(27, 42, 74, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 .chat-page.has-bg-video .composer textarea {
-  background: rgba(255, 253, 248, 0.85);
+  background: rgba(255, 253, 248, 0.65);
 }
 .chat-page.has-bg-video .chat-note {
   color: rgba(247, 241, 227, 0.75);
