@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { characters, getCategories } from "@/lib/characters";
+import { characters, getCategories, getCharacter } from "@/lib/characters";
 import CharacterGallery from "./components/CharacterGallery";
+import LiveAvatarSection from "./components/LiveAvatarSection";
 import { TopBar, Footer } from "./components/SiteChrome";
+import { createClient } from "@/lib/supabase/server";
+import { getActiveSubscription } from "@/lib/subscription";
+import { TIERS } from "@/lib/plans";
+import { getLiveAvatarCharacterIds } from "@/lib/liveAvatar";
 
 // Apenas os campos de exibição (sem o `raw` da base) vão para o cliente.
 function toDisplay(c) {
@@ -18,9 +23,22 @@ function toDisplay(c) {
   };
 }
 
-export default function HomePage() {
+export default async function HomePage() {
   const categories = getCategories();
   const display = characters.map(toDisplay);
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const subscription = user ? await getActiveSubscription(supabase, user.id) : null;
+  const hasLiveAvatarAccess = !!(
+    subscription && TIERS[subscription.tier]?.liveAvatar
+  );
+  const liveAvatarCharacters = getLiveAvatarCharacterIds()
+    .map((id) => getCharacter(id))
+    .filter(Boolean)
+    .map(toDisplay);
 
   return (
     <>
@@ -40,6 +58,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <LiveAvatarSection
+        characters={liveAvatarCharacters}
+        hasAccess={hasLiveAvatarAccess}
+      />
 
       <section className="section" id="personagens">
         <div className="container">
